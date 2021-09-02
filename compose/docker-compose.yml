@@ -55,15 +55,15 @@ services:
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
 
-  ## Disabling cron by default as it uses higher CPU, enable if needed
-  #cron:
-  #  image: markoshust/magento-php:7.4-fpm-6
-  #  user: root
-  #  command: /usr/local/bin/cronstart
-  #  tty: true
-  #  links:
-  #    - db
-  #  volumes: *appvolumes
+  ## Disable if not needed - uses high CPU
+  cron:
+   image: markoshust/magento-php:7.4-fpm-6
+   user: root
+   command: /usr/local/bin/cronstart
+   tty: true
+   links:
+     - db
+   volumes: *appvolumes
 
 volumes:
   appdata:

@@ -129,9 +129,11 @@ To disable this functionality, uncomment the last line in the `bin/start` file t
 
 ### Cron
 
-By default, the `cron` container is disabled. To enable it, modify the Docker `compose` files.
+***NOTE Due to the nature of Data Solutions use cases, cron has been enabled by default and will be constantly running. If you do not need this, disable the cron containers using the instructions below or `bin/stop` the instance when you are not using it.***
 
-In `docker-compose.yml`, uncomment the [following lines](https://github.com/rossbrandon/docker-magento/blob/main/compose/docker-compose.yml#L58-L65).
+By default, the `cron` container is enabled. To disable it, modify the Docker `compose` files.
+
+In `docker-compose.yml`, comment out the [following lines](https://github.com/rossbrandon/docker-magento/blob/main/compose/docker-compose.yml#L58-L65).
 
 ```yml
 #cron:
@@ -144,7 +146,7 @@ In `docker-compose.yml`, uncomment the [following lines](https://github.com/ross
 #  volumes: *appvolumes
 ```
 
-In `docker-compose.dev.yml`, uncomment the [following lines](https://github.com/rossbrandon/docker-magento/blob/main/compose/docker-compose.dev.yml#L69-L70).
+In `docker-compose.dev.yml`, comment out the [following lines](https://github.com/rossbrandon/docker-magento/blob/main/compose/docker-compose.dev.yml#L69-L70).
 
 ```yml
 #cron:

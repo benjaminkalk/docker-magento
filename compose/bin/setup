@@ -2,6 +2,7 @@
 
 set -o errexit
 
+# shellcheck source=../env/install.env
 source env/install.env
 
 ES_HOST=elasticsearch
@@ -12,18 +13,29 @@ bin/stop
 docker-compose -f docker-compose.yml up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
 
-bin/clinotty chmod u+x bin/magento
-mv .vscode src
+echo "Copying all files from host to container..."
+rm -rf src/vendor
+bin/copytocontainer --all
 
-echo "Waiting for connection to Elasticsearch..."
-bin/clinotty timeout 100 bash -c "
+bin/cli chmod u+x bin/magento
+
+echo "Waiting for connection to local Elasticsearch..."
+bin/cli timeout 100 bash -c "
     until curl --silent --output /dev/null http://$ES_HOST:$ES_PORT/_cat/health?h=st; do
         printf '.'
         sleep 2
     done"
 [ $? != 0 ] && echo "Failed to connect to Elasticsearch" && exit
+echo "Local Elasticsearch connection succeeded..."
 
-bin/clinotty bin/magento setup:install \
+echo "Ensuring Composer auth.json is setup..."
+bin/setup-composer-auth
+
+echo "Forcing reinstall of composer deps to ensure perms & reqs..."
+bin/composer install
+
+echo "Setting up Magento..."
+bin/magento setup:install \
   --base-url="$MAGENTO_BASE_URL" \
   --use-secure="$MAGENTO_USE_SECURE" \
   --db-host=db \
@@ -56,42 +68,37 @@ bin/clinotty bin/magento setup:install \
   --session-save-redis-log-level=4 \
   --session-save-redis-db=2 \
   --search-engine=elasticsearch7 \
-  --elasticsearch-host=$ES_HOST \
-  --elasticsearch-port=$ES_PORT \
-  --use-rewrites=1
+  --elasticsearch-host="$ES_HOST" \
+  --elasticsearch-port="$ES_PORT" \
+  --use-rewrites=1 \
+  --disable-modules="$MAGENTO_DISABLED_MODULES"
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
 
 echo "Turning on developer mode.."
-bin/clinotty bin/magento deploy:mode:set developer
+bin/magento deploy:mode:set developer
 
 if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
   bin/install-sampledata
 fi
 
-bin/clinotty bin/magento indexer:reindex
+bin/magento indexer:reindex
 
 #echo "Forcing deploy of static content to speed up initial requests..."
 #bin/clinotty bin/magento setup:static-content:deploy -f
 
 echo "Re-indexing with Elasticsearch..."
-bin/clinotty bin/magento indexer:reindex
+bin/magento indexer:reindex
 
 echo "Clearing the cache to apply updates..."
-bin/clinotty bin/magento cache:flush
+bin/magento cache:flush
 
 echo "Generating SSL certificate..."
 bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
 
 #echo "Enabling XDebug..."
 #bin/xdebug enable
-
-echo "Ensuring Composer auth.json is setup..."
-bin/setup-composer-auth
-
-echo "Installing cron (see docker-compose.yml to enable)..."
-bin/magento cron:install
 
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at $MAGENTO_BASE_URL"
