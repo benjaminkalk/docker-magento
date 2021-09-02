@@ -38,6 +38,7 @@ MODULES_TO_ENABLE+=('Magento_CatalogUrlRewriteDataExporter')
 MODULES_TO_ENABLE+=('Magento_ConfigurableProductDataExporter')
 MODULES_TO_ENABLE+=('Magento_BundleProductDataExporter')
 MODULES_TO_ENABLE+=('Magento_ParentProductDataExporter')
+MODULES_TO_ENABLE+=('Magento_ProductVariantDataExporter')
 MODULES_TO_ENABLE+=('Magento_ProductOverrideDataExporter')
 if [[ "$INSTALL_PREX" ]]; then
     # Clone prex repos to extensions directories
@@ -106,6 +107,9 @@ if [[ "$SAAS_ENVIRONMENT" == "qa" ]]; then
         sed -i '' -e 's/api.magento.com/qa-api.magedevteam.com/g' extensions/catalog-sync-admin/CatalogSyncAdmin/etc/csp_whitelist.xml
         sed -i '' -e 's/commerce.adobe.io/commerce-int.adobe.io/g' extensions/catalog-sync-admin/CatalogSyncAdmin/etc/csp_whitelist.xml
         sed -i '' -e 's/commerce.adobe.net/catalog-sync-ui-qa.magento-datasolutions.com/g' extensions/catalog-sync-admin/CatalogSyncAdmin/etc/csp_whitelist.xml
+    fi
+    if [[ "$INSTALL_SEARCH" ]]; then
+        sed -i '' -e 's/livesearch-autocomplete.magento-ds.com/searchautocompleteqa.magento-datasolutions.com/g' extensions/magento-live-search/LiveSearchStorefrontPopover/etc/config.xml
     fi
 fi
 
