@@ -9,9 +9,6 @@ rm -rf extensions
 echo "Installing Data Solutions extensions..."
 mkdir extensions
 
-# This array tracks all modules to be enabled during this installation
-MODULES_TO_ENABLE=()
-
 # Install services-connector jwt dependency
 bin/cli composer require firebase/php-jwt
 
@@ -23,36 +20,11 @@ git clone git@github.com:magento-commerce/saas-export.git extensions/saas-export
 git clone git@github.com:magento-commerce/commerce-data-export.git extensions/commerce-data-export
 git clone git@github.com:magento-commerce/commerce-data-export-ee.git extensions/commerce-data-export-ee
 
-# Add common DS extensions to enable array
-MODULES_TO_ENABLE+=('Magento_ServicesConnector')
-MODULES_TO_ENABLE+=('Magento_ServicesId')
-MODULES_TO_ENABLE+=('Magento_DataServices')
-MODULES_TO_ENABLE+=('Magento_DataServicesMultishipping')
-MODULES_TO_ENABLE+=('Magento_SaaSCatalog')
-MODULES_TO_ENABLE+=('Magento_SaaSCommon')
-MODULES_TO_ENABLE+=('Magento_QueryXml')
-MODULES_TO_ENABLE+=('Magento_DataExporter')
-MODULES_TO_ENABLE+=('Magento_CatalogDataExporter')
-MODULES_TO_ENABLE+=('Magento_CatalogInventoryDataExporter')
-MODULES_TO_ENABLE+=('Magento_CatalogUrlRewriteDataExporter')
-MODULES_TO_ENABLE+=('Magento_ConfigurableProductDataExporter')
-MODULES_TO_ENABLE+=('Magento_BundleProductDataExporter')
-MODULES_TO_ENABLE+=('Magento_ParentProductDataExporter')
-MODULES_TO_ENABLE+=('Magento_ProductVariantDataExporter')
-MODULES_TO_ENABLE+=('Magento_ProductOverrideDataExporter')
 if [[ "$INSTALL_PREX" ]]; then
     # Clone prex repos to extensions directories
     git clone git@github.com:magento-commerce/magento-product-recommendations.git extensions/product-recommendations
     git clone git@github.com:magento-commerce/magento-product-recommendations-admin.git extensions/product-recommendations-admin
     git clone git@github.com:magento-commerce/magento-catalog-sync-admin.git extensions/catalog-sync-admin
-
-    # Add prex extensions to enable array
-    MODULES_TO_ENABLE+=('Magento_ProductRecommendationsLayout')
-    MODULES_TO_ENABLE+=('Magento_PageBuilderProductRecommendations')
-    MODULES_TO_ENABLE+=('Magento_VisualProductRecommendations')
-    MODULES_TO_ENABLE+=('Magento_ProductRecommendationsAdmin')
-    MODULES_TO_ENABLE+=('Magento_ProductRecommendationsSyncAdmin')
-    MODULES_TO_ENABLE+=('Magento_CatalogSyncAdmin')
 fi
 if [[ "$INSTALL_SEARCH" ]]; then
     # Install live-search graphql dependency
@@ -60,13 +32,6 @@ if [[ "$INSTALL_SEARCH" ]]; then
 
     # Clone search repo to extensions directories
     git clone git@github.com:magento-commerce/magento-live-search.git extensions/magento-live-search
-
-    # Add search extensions to enable array
-    MODULES_TO_ENABLE+=('Magento_LiveSearch')
-    MODULES_TO_ENABLE+=('Magento_LiveSearchAdapter')
-    MODULES_TO_ENABLE+=('Magento_LiveSearchStorefrontPopover')
-    MODULES_TO_ENABLE+=('Magento_LiveSearchMetrics')
-    MODULES_TO_ENABLE+=('Magento_LiveSearchTerms')
 fi
 
 if [[ "$SAAS_ENVIRONMENT" == "qa" ]]; then
@@ -133,8 +98,7 @@ fi
 
 bin/restart
 
-echo "Enabling modules: ${MODULES_TO_ENABLE[*]}"
-bin/magento module:enable "${MODULES_TO_ENABLE[*]}"
+bin/magento module:enable --all
 if [[ "$INSTALL_SEARCH" ]]; then
     # Disable local elasticsearch if live search is installed (would be ideal if we could find a way to not spin up the local ES container in this case as well)
     if [[ "$MAGENTO_EDITION" == 'open-source' ]]; then

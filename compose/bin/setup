@@ -77,13 +77,12 @@ echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
 
 echo "Turning on developer mode.."
+bin/cli rm -rf /var/www/html/generated/code
 bin/magento deploy:mode:set developer
 
 if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
   bin/install-sampledata
 fi
-
-bin/magento indexer:reindex
 
 #echo "Forcing deploy of static content to speed up initial requests..."
 #bin/clinotty bin/magento setup:static-content:deploy -f
@@ -97,8 +96,8 @@ bin/magento cache:flush
 echo "Generating SSL certificate..."
 bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
 
-#echo "Enabling XDebug..."
-#bin/xdebug enable
+echo "Enabling XDebug..."
+bin/xdebug enable
 
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at $MAGENTO_BASE_URL"
