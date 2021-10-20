@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -o errexit
+
+echo "Uninstalling Magento!!!"
+bin/magento setup:uninstall

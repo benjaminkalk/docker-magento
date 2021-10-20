@@ -18,7 +18,9 @@ git clone git@github.com:magento-commerce/data-services.git extensions/data-serv
 git clone git@github.com:magento-commerce/services-id.git extensions/services-id
 git clone git@github.com:magento-commerce/saas-export.git extensions/saas-export
 git clone git@github.com:magento-commerce/commerce-data-export.git extensions/commerce-data-export
-git clone git@github.com:magento-commerce/commerce-data-export-ee.git extensions/commerce-data-export-ee
+if [[ "$MAGENTO_EDITION" == "commerce" ]]; then
+  git clone git@github.com:magento-commerce/commerce-data-export-ee.git extensions/commerce-data-export-ee
+fi
 
 if [[ "$INSTALL_PREX" ]]; then
     # Clone prex repos to extensions directories
@@ -83,7 +85,9 @@ sed -i '' -e 's/#- .\/extensions\/services-connector/- .\/extensions\/services-c
 sed -i '' -e 's/#- .\/extensions\/services-id/- .\/extensions\/services-id/g' docker-compose.dev.yml
 sed -i '' -e 's/#- .\/extensions\/data-services/- .\/extensions\/data-services/g' docker-compose.dev.yml
 sed -i '' -e 's/#- .\/extensions\/commerce-data-export/- .\/extensions\/commerce-data-export/g' docker-compose.dev.yml
-sed -i '' -e 's/#- .\/extensions\/commerce-data-export-ee/- .\/extensions\/commerce-data-export-ee/g' docker-compose.dev.yml
+if [[ "$MAGENTO_EDITION" == "commerce" ]]; then
+  sed -i '' -e 's/#- .\/extensions\/commerce-data-export-ee/- .\/extensions\/commerce-data-export-ee/g' docker-compose.dev.yml
+fi
 sed -i '' -e 's/#- .\/extensions\/saas-export/- .\/extensions\/saas-export/g' docker-compose.dev.yml
 
 if [[ "$INSTALL_PREX" ]]; then
