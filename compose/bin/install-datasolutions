@@ -110,6 +110,9 @@ if [[ "$INSTALL_SEARCH" ]]; then
     else
         bin/magento module:disable Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_AdvancedSearch Magento_InventoryElasticsearch
     fi
+
+    # add QA environment to env.php, https://github.com/magento-commerce/magento-live-search#connecting-to-qa-environment
+    php -r '$sC = include "./env/php/livesearch-env.php"; $env = include "./src/app/etc/env.php"; $env = array_replace_recursive($env, $sC); $contents = var_export($env, true); file_put_contents("./src/app/etc/env.php", "<?php\n return $contents; \n");'
 fi
 
 echo "Compiling Magento with changes..."

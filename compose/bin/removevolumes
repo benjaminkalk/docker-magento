@@ -6,3 +6,4 @@ docker volume rm "${volume_prefix}"_dbdata
 docker volume rm "${volume_prefix}"_rabbitmqdata
 docker volume rm "${volume_prefix}"_sockdata
 docker volume rm "${volume_prefix}"_ssldata
+bin/cleanup
