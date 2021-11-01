@@ -70,8 +70,10 @@ bin/magento setup:install \
   --search-engine=elasticsearch7 \
   --elasticsearch-host="$ES_HOST" \
   --elasticsearch-port="$ES_PORT" \
-  --use-rewrites=1 \
-  --disable-modules="$MAGENTO_DISABLED_MODULES"
+  --use-rewrites=1
+if [[ "$MAGENTO_EDITION" == "commerce" ]]; then \
+  --disable-modules="$MAGENTO_COMMERCE_DISABLED_MODULES"
+fi
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
@@ -96,8 +98,8 @@ bin/magento cache:flush
 echo "Generating SSL certificate..."
 bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
 
-echo "Enabling XDebug..."
-bin/xdebug enable
+echo "Disable XDebug by default..."
+bin/xdebug disable
 
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at $MAGENTO_BASE_URL"
