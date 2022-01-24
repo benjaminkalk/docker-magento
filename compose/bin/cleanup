@@ -1,6 +1,0 @@
-#!/bin/bash
-
-cd ./src
-rm -rf generated/* var/*
-git clean -fdx
-cd ..

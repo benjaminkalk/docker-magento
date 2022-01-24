@@ -1,0 +1,5 @@
+#!/bin/bash
+
+bin/install-src
+bin/install-datasolutions
+bin/setup

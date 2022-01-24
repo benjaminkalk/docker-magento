@@ -8,7 +8,6 @@ This is a customized repository forked from https://github.com/markshust/docker-
   - [Table of Contents](#table-of-contents)
     - [Data Solutions Install Instructions](#data-solutions-install-instructions)
       - [Templated Install](#templated-install)
-      - [Automated Setup (New Project)](#automated-setup-new-project)
     - [CLI Commands](#cli-commands)
     - [Caching](#caching)
     - [Cron](#cron)
@@ -31,41 +30,23 @@ If you have apache, nginx, mysql or php-fpm running locally, be sure to stop the
 
 ```bash
 # Download the Docker Compose template into the specified project directory (Ex. magento2)
-curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/master/lib/template | bash -s -- magento2
+curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/main/lib/template | bash -s -- magento2
 
 # Configure env/install.env file to specify Magento version, edition, Magento install source, and if you need Luma sample data
 # Example:
-#MAGENTO_VERSION=2.3.4
-#MAGENTO_EDITION=open-source
+#MAGENTO_VERSION=2.4.3-p1
 #INSTALL_SOURCE=composer # This is the method used to install Magento only not Data Solutions extensions
 #INSTALL_SAMPLE_DATA=true
-
-# Install the Magento source as configured in env/install.env
-# Skip this step if you want to use a pre-existing src code directory
-bin/install-src
 
 # Create a DNS host entry for the site
 # Default site is magento2.test. You may customize this with the MAGENTO_BASE_URL variable in env/install.env
 echo "127.0.0.1 ::1 magento2.test" | sudo tee -a /etc/hosts
 
-# Run the setup installer for Magento:
-# Then run:
-bin/setup
-
-# To install Data Solutions modules (ServicesConnector, ServicesId, DataServices, SaasExport, ProductRecommendations)
-# Update the INSTALL_PREX and INSTALL_SEARCH in env/install.env to select the extension you want to install.
-bin/install-datasolutions
+# Run the create script to get going!
+bin/create
 
 # Open site
 open https://magento2.test
-```
-
-#### Automated Setup (New Project)
-
-Run this automated one-liner from the directory you want to install your project to:
-
-```bash
-curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/master/lib/onelinesetup | bash -s -- magento2.test 2.3.3
 ```
 
 ---
@@ -80,6 +61,7 @@ curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/master/lib/
 - `bin/composer`: Run the composer binary. Ex. `bin/composer install`
 - `bin/copyfromcontainer`: Copy folders or files from container to host. Ex. `bin/copyfromcontainer vendor`
 - `bin/copytocontainer`: Copy folders or files from host to container. Ex. `bin/copytocontainer --all`
+- `bin/create`: Downloads, installs, and starts Magento with Data Solutions extensions (currently Product Recommendations and Live Search)
 - `bin/destroy`: Stops docker containers and prunes containers, networks, and volumes - Use when rebuilding entirely
 - `bin/dev-urn-catalog-generate`: Generate URN's for PHPStorm and remap paths to local host. Restart PHPStorm after running this command.
 - `bin/devconsole`: Alias for `bin/n98-magerun2 dev:console`
@@ -234,30 +216,41 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
       - Add the following volume bindings:
         - `/var/www/html` -> `<path_to_project>/src`
         - `/var/www/html/app/code/Magento/DataServices` -> `<path_to_project>/extensions/data-services/DataServices`
+        - `/var/www/html/app/code/Magento/DataServicesMultishipping` -> `<path_to_project>/extensions/data-services/DataServicesMultishipping`
         - `/var/www/html/app/code/Magento/ServicesId` -> `<path_to_project>/extensions/services-id/ServicesId`
+        - `/var/www/html/app/code/Magento/ServicesConnector` -> `<path_to_project>/extensions/services-connector/ServicesConnector`
         - `/var/www/html/app/code/Magento/ProductRecommendations` -> `<path_to_project>/extensions/product-recommendations/ProductRecommendations`
         - `/var/www/html/app/code/Magento/ProductRecommendationsLayout` -> `<path_to_project>/extensions/product-recommendations/ProductRecommendationsLayout`
+        - `/var/www/html/app/code/Magento/PageBuilderProductRecommendations` -> `<path_to_project>/extensions/product-recommendations/PageBuilderProductRecommendations`
+        - `/var/www/html/app/code/Magento/VisualProductRecommendations` -> `<path_to_project>/extensions/product-recommendations/VisualProductRecommendations`
+        - `/var/www/html/app/code/Magento/ProductRecommendationsAdmin` -> `<path_to_project>/extensions/product-recommendations-admin/ProductRecommendationsAdmin`
+        - `/var/www/html/app/code/Magento/ProductRecommendationsSyncAdmin` -> `<path_to_project>/extensions/product-recommendations-admin/ProductRecommendationsSyncAdmin`
+        - `/var/www/html/app/code/Magento/CatalogSyncAdmin` -> `<path_to_project>/extensions/catalog-sync-admin/CatalogSyncAdmin`
         - `/var/www/html/app/code/Magento/BundleProductDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/BundleProductDataExporter`
         - `/var/www/html/app/code/Magento/CatalogDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/CatalogDataExporter`
         - `/var/www/html/app/code/Magento/CatalogInventoryDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/CatalogInventoryDataExporter`
         - `/var/www/html/app/code/Magento/CatalogUrlRewriteDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/CatalogUrlRewriteDataExporter`
         - `/var/www/html/app/code/Magento/ConfigurableProductDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/ConfigurableProductDataExporter`
         - `/var/www/html/app/code/Magento/DataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/DataExporter`
+        - `/var/www/html/app/code/Magento/QueryXml` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/QueryXml`
         - `/var/www/html/app/code/Magento/ParentProductDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/ParentProductDataExporter`
         - `/var/www/html/app/code/Magento/ProductVariantDataExporter` -> `<path_to_project>/extensions/commerce-data-export/app/code/Magento/ProductVariantDataExporter`
+        - `/var/www/html/app/code/Magento/ProductOverrideDataExporter` -> `<path_to_project>/extensions/commerce-data-export-ee/app/code/Magento/ProductOverrideDataExporter`
         - `/var/www/html/app/code/Magento/SaaSCatalog` -> `<path_to_project>/extensions/saas-export/app/code/Magento/SaaSCatalog`
         - `/var/www/html/app/code/Magento/SaaSCommon` -> `<path_to_project>/extensions/saas-export/app/code/Magento/SaaSCommon`
         - `/var/www/html/app/code/Magento/LiveSearch` -> `<path_to_project>/extensions/magento-live-search/app/code/Magento/LiveSearch`
         - `/var/www/html/app/code/Magento/LiveSearchAdapter` -> `<path_to_project>/extensions/magento-live-search/app/code/Magento/LiveSearchAdapter`
+        - `/var/www/html/app/code/Magento/LiveSearchMetrics` -> `<path_to_project>/extensions/magento-live-search/app/code/Magento/LiveSearchMetrics`
         - `/var/www/html/app/code/Magento/LiveSearchStorefrontPopover` -> `<path_to_project>/extensions/magento-live-search/app/code/Magento/LiveSearchStorefrontPopover`
+        - `/var/www/html/app/code/Magento/LiveSearchTerms` -> `<path_to_project>/extensions/magento-live-search/app/code/Magento/LiveSearchTerms`
 
 ![PHPStorm Docker Mappings](docs/docker_mappings.png)
 
-4. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Debug` and set Debug Port to `9001,9003`.
+1. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Debug` and set Debug Port to `9001,9003`.
 
-5. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > DBGp Proxy` and set Port to `9001`.
+2. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > DBGp Proxy` and set Port to `9001`.
 
-6. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Servers` and create a new server:
+3. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Servers` and create a new server:
 
    - Set Name and Host to your domain name (ex. `magento2.test`)
    - Keep port set to `80`
@@ -265,9 +258,16 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
    - Add the following path mappings (to match the volume bindings from step 3c above):
      - `./src` -> `/var/www/html`
      - `./extensions/data-services/DataServices` -> `/var/www/html/app/code/Magento/DataServices`
-     - `./extensions/services-id/ServicesId` -> `/var/www/html/app/code/Magento/ServicesId` -> `<path_to_project>/extensions/services-id/ServicesId`
+     - `./extensions/data-services/DataServicesMultishipping` -> `/var/www/html/app/code/Magento/DataServicesMultishipping`
+     - `./extensions/services-id/ServicesId` -> `<path_to_project>/extensions/services-id/ServicesId`
+     - `./extensions/services-connector/ServicesConnector` -> `<path_to_project>/extensions/services-connector/ServicesConnector`
      - `./extensions/product-recommendations/ProductRecommendations` -> `/var/www/html/app/code/Magento/ProductRecommendations`
      - `./extensions/product-recommendations/ProductRecommendationsLayout` -> `/var/www/html/app/code/Magento/ProductRecommendationsLayout`
+     - `./extensions/product-recommendations/PageBuilderProductRecommendations` -> `/var/www/html/app/code/Magento/PageBuilderProductRecommendations`
+     - `./extensions/product-recommendations/VisualProductRecommendations` -> `/var/www/html/app/code/Magento/VisualProductRecommendations`
+     - `./extensions/product-recommendations-admin/ProductRecommendationsAdmin` -> `/var/www/html/app/code/Magento/ProductRecommendationsAdmin`
+     - `./extensions/product-recommendations-admin/ProductRecommendationsSyncAdmin` -> `/var/www/html/app/code/Magento/ProductRecommendationsSyncAdmin`
+     - `./extensions/catalog-sync-admin/CatalogSyncAdmin` -> `/var/www/html/app/code/Magento/CatalogSyncAdmin`
      - `./extensions/commerce-data-export/app/code/Magento/BundleProductDataExporter` -> `/var/www/html/app/code/Magento/BundleProductDataExporter`
      - `./extensions/commerce-data-export/app/code/Magento/CatalogDataExporter` -> `/var/www/html/app/code/Magento/CatalogDataExporter`
      - `./extensions/commerce-data-export/app/code/Magento/CatalogInventoryDataExporter` -> `/var/www/html/app/code/Magento/CatalogInventoryDataExporter`
@@ -276,17 +276,20 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
      - `./extensions/commerce-data-export/app/code/Magento/DataExporter` -> `/var/www/html/app/code/Magento/DataExporter`
      - `./extensions/commerce-data-export/app/code/Magento/ParentProductDataExporter` -> `/var/www/html/app/code/Magento/ParentProductDataExporter`
      - `./extensions/commerce-data-export/app/code/Magento/ProductVariantDataExporter` -> `/var/www/html/app/code/Magento/ProductVariantDataExporter`
+     - `./extensions/commerce-data-export-ee/app/code/Magento/ProductOverrideDataExporter` -> `/var/www/html/app/code/Magento/ProductOverrideDataExporter`
      - `./extensions/saas-export/app/code/Magento/SaaSCatalog` -> `/var/www/html/app/code/Magento/SaaSCatalog`
      - `./extensions/saas-export/app/code/Magento/SaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
      - `./extensions/magento-live-search/app/code/Magento/LiveSearch` -> `/var/www/html/app/code/Magento/LiveSearch`
      - `./extensions/magento-live-search/app/code/Magento/LiveSearchAdapter` -> `/var/www/html/app/code/Magento/LiveSearchAdapter`
+     - `./extensions/magento-live-search/app/code/Magento/LiveSearchMetrics` -> `/var/www/html/app/code/Magento/LiveSearchMetrics`
      - `./extensions/magento-live-search/app/code/Magento/LiveSearchStorefrontPopover` -> `/var/www/html/app/code/Magento/LiveSearchStorefrontPopover`
+     - `./extensions/magento-live-search/app/code/Magento/LiveSearchTerms` -> `/var/www/html/app/code/Magento/LiveSearchTerms`
 
 ![PHPStorm Remote Debug Mappings](docs/remote_debug_mappings.png)
 
-7. Go to `Run > Edit Configurations` and create a new `PHP Remote Debug` configuration by clicking the plus sign and selecting it. Set the Name to your domain (ex. `magento.test`). Check the `Filter debug connection by IDE key` checkbox, select the server you just setup, and under IDE Key enter `PHPSTORM`. This IDE Key should match the IDE Key set by the Chrome Xdebug Helper. Then click OK to finish setting up the remote debugger in PHPStorm.
+1. Go to `Run > Edit Configurations` and create a new `PHP Remote Debug` configuration by clicking the plus sign and selecting it. Set the Name to your domain (ex. `magento.test`). Check the `Filter debug connection by IDE key` checkbox, select the server you just setup, and under IDE Key enter `PHPSTORM`. This IDE Key should match the IDE Key set by the Chrome Xdebug Helper. Then click OK to finish setting up the remote debugger in PHPStorm.
 
-8. Open up `src/pub/index.php`, and set a breakpoint near the end of the file. Go to `Run > Debug 'magento.test'`, and open up a web browser. Ensure the Chrome Xdebug helper is enabled by clicking on it > Debug. Navigate to your Magento store URL, and Xdebug within PHPStorm should now trigger the debugger and pause at the toggled breakpoint.
+2. Open up `src/pub/index.php`, and set a breakpoint near the end of the file. Go to `Run > Debug 'magento.test'`, and open up a web browser. Ensure the Chrome Xdebug helper is enabled by clicking on it > Debug. Navigate to your Magento store URL, and Xdebug within PHPStorm should now trigger the debugger and pause at the toggled breakpoint.
 
 ---
 
