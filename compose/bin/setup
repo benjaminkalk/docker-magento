@@ -5,12 +5,7 @@ set -o errexit
 # shellcheck source=../env/install.env
 source env/install.env
 
-DISABLED_MODULES_PARAM="Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7,Magento_ElasticsearchCatalogPermissions,Magento_AdvancedSearch,Magento_InventoryElasticsearch"
-DISABLED_MODULES_LIST=(Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_AdvancedSearch Magento_InventoryElasticsearch)
-
-# Install Data Solutions extensions before Magento setup
-bin/install-datasolutions
-
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --remove-orphans
 docker-compose -f docker-compose.yml up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
 
@@ -20,58 +15,61 @@ bin/copytocontainer --all
 
 bin/cli chmod u+x bin/magento
 
-echo "Ensuring Composer auth.json is setup..."
+echo "Set up composer auth.json..."
 bin/setup-composer-auth
 
-echo "Forcing reinstall of composer deps to ensure perms & reqs..."
+echo "Running composer install..."
 bin/composer install
 
+echo "Installing Data Solutions composer dev requirements"
 # Install services-connector jwt dependency
 bin/composer require firebase/php-jwt
-
 # Install live search graphql dependency
 bin/composer require gmostafa/php-graphql-client
 
 echo "Setting up Magento..."
 
 bin/magento setup:install \
---base-url="$MAGENTO_BASE_URL" \
---use-secure="$MAGENTO_USE_SECURE" \
---db-host=db \
---db-name="$MYSQL_DATABASE" \
---db-user="$MYSQL_USER" \
---db-password="$MYSQL_PASSWORD" \
---backend-frontname="$MAGENTO_BACKEND_FRONTNAME" \
---language="$MAGENTO_LANGUAGE" \
---timezone="$MAGENTO_TIMEZONE" \
---currency="$MAGENTO_DEFAULT_CURRENCY" \
---use-secure-admin="$MAGENTO_USE_SECURE_ADMIN" \
---admin-firstname="$MAGENTO_ADMIN_FIRSTNAME" \
---admin-lastname="$MAGENTO_ADMIN_LASTNAME" \
---admin-email="$MAGENTO_ADMIN_EMAIL" \
---admin-user="$MAGENTO_ADMIN_USERNAME" \
---admin-password="$MAGENTO_ADMIN_PASSWORD" \
---amqp-host=rabbitmq \
---amqp-port=5672 \
---amqp-user=guest \
---amqp-password=guest \
---amqp-virtualhost=/ \
---cache-backend=redis \
---cache-backend-redis-server=redis \
---cache-backend-redis-db=0 \
---page-cache=redis \
---page-cache-redis-server=redis \
---page-cache-redis-db=1 \
---session-save=redis \
---session-save-redis-host=redis \
---session-save-redis-log-level=4 \
---session-save-redis-db=2 \
---search-engine=elasticsearch7 \
---use-rewrites=1 \
---disable-modules="$DISABLED_MODULES_PARAM"
+  --base-url="$MAGENTO_BASE_URL" \
+  --use-secure="$MAGENTO_USE_SECURE" \
+  --db-host=db \
+  --db-name="$MYSQL_DATABASE" \
+  --db-user="$MYSQL_USER" \
+  --db-password="$MYSQL_PASSWORD" \
+  --backend-frontname="$MAGENTO_BACKEND_FRONTNAME" \
+  --language="$MAGENTO_LANGUAGE" \
+  --timezone="$MAGENTO_TIMEZONE" \
+  --currency="$MAGENTO_DEFAULT_CURRENCY" \
+  --use-secure-admin="$MAGENTO_USE_SECURE_ADMIN" \
+  --admin-firstname="$MAGENTO_ADMIN_FIRSTNAME" \
+  --admin-lastname="$MAGENTO_ADMIN_LASTNAME" \
+  --admin-email="$MAGENTO_ADMIN_EMAIL" \
+  --admin-user="$MAGENTO_ADMIN_USERNAME" \
+  --admin-password="$MAGENTO_ADMIN_PASSWORD" \
+  --amqp-host=rabbitmq \
+  --amqp-port=5672 \
+  --amqp-user=guest \
+  --amqp-password=guest \
+  --amqp-virtualhost=/ \
+  --cache-backend=redis \
+  --cache-backend-redis-server=redis \
+  --cache-backend-redis-db=0 \
+  --page-cache=redis \
+  --page-cache-redis-server=redis \
+  --page-cache-redis-db=1 \
+  --session-save=redis \
+  --session-save-redis-host=redis \
+  --session-save-redis-log-level=4 \
+  --session-save-redis-db=2 \
+  --use-rewrites=1 \
+  --disable-modules=Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7,Magento_ElasticsearchCatalogPermissions,Magento_AdvancedSearch,Magento_InventoryElasticsearch
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
+
+echo "Cleaning up generated directories..."
+bin/cli rm -rf /var/www/html/generated/code/Magento
+bin/cli rm -rf /var/www/html/generated/code
 
 echo "Turning on developer mode.."
 bin/magento deploy:mode:set developer
@@ -80,13 +78,16 @@ if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
   bin/install-sampledata
 fi
 
+echo "Restarting with docker-compose.dev..."
+bin/restart
+
 echo "Enabling required modules and recompiling..."
 bin/magento module:enable --all
-bin/magento module:disable $DISABLED_MODULES_LIST
+bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_AdvancedSearch Magento_InventoryElasticsearch
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 
-echo "Re-indexing..."
+echo "Reindexing..."
 bin/magento indexer:reindex
 
 echo "Clearing the cache..."

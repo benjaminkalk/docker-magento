@@ -9,14 +9,21 @@ services:
   app:
     volumes: &appvolumes
       # Host mounts with performance penalty, only put what is necessary here
-      - ./src/app/code:/var/www/html/app/code:delegated
-      - ./src/app/design:/var/www/html/app/design:delegated
-      - ./src/app/etc:/var/www/html/app/etc:delegated
-      - ./src/composer.json:/var/www/html/composer.json:delegated
-      - ./src/composer.lock:/var/www/html/composer.lock:delegated
-      - ./src/nginx.conf.sample:/var/www/html/nginx.conf:delegated
-      - ./src/var/log:/var/www/html/var/log:delegated
-      #- ./src/var/report:/var/www/html/var/report:delegated
+      - ./src/app/code:/var/www/html/app/code:cached
+      - ./src/app/design:/var/www/html/app/design:cached
+      - ./src/app/etc:/var/www/html/app/etc:cached
+      - ./src/composer.json:/var/www/html/composer.json:cached
+      - ./src/composer.lock:/var/www/html/composer.lock:cached
+      - ./src/nginx.conf.sample:/var/www/html/nginx.conf:cached
+      #- ./src/auth.json:/var/www/html/auth.json:cached
+      #- ./src/m2-hotfixes:/var/www/html/m2-hotfixes:cached
+      #- ./src/patches:/var/www/html/patches:cached
+      #- ./src/var/log:/var/www/html/var/log:cached
+      #- ./src/var/report:/var/www/html/var/report:cached
+      ## To sync your SSH to the container, uncomment the following line:
+      #- ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
+      ## Linux only: remove the above lines (except nginx.conf line) and mount the entire src directory with:
+      #- ./src:/var/www/html:cached
       - ./extensions/services-connector/ServicesConnector:/var/www/html/app/code/Magento/ServicesConnector:consistent
       - ./extensions/services-id/ServicesId:/var/www/html/app/code/Magento/ServicesId:consistent
       - ./extensions/data-services/DataServices:/var/www/html/app/code/Magento/DataServices:consistent
@@ -28,6 +35,7 @@ services:
       - ./extensions/commerce-data-export/BundleProductDataExporter:/var/www/html/app/code/Magento/BundleProductDataExporter:consistent
       - ./extensions/commerce-data-export/DataExporter:/var/www/html/app/code/Magento/DataExporter:consistent
       - ./extensions/commerce-data-export/ParentProductDataExporter:/var/www/html/app/code/Magento/ParentProductDataExporter:consistent
+      - ./extensions/commerce-data-export/ProductVariantDataExporter:/var/www/html/app/code/Magento/ProductVariantDataExporter:consistent
       - ./extensions/commerce-data-export/QueryXml:/var/www/html/app/code/Magento/QueryXml:consistent
       - ./extensions/commerce-data-export-ee/ProductOverrideDataExporter:/var/www/html/app/code/Magento/ProductOverrideDataExporter:consistent
       - ./extensions/saas-export/SaaSCatalog:/var/www/html/app/code/Magento/SaaSCatalog:consistent
