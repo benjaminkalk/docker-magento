@@ -1,8 +1,3 @@
-# Mark Shust's Docker Configuration for Magento
-# (https://github.com/markshust/docker-magento)
-#
-# Version 38.0.0
-
 version: "3"
 
 services:
@@ -20,58 +15,7 @@ services:
       #- ./src/patches:/var/www/html/patches:cached
       #- ./src/var/log:/var/www/html/var/log:cached
       #- ./src/var/report:/var/www/html/var/report:cached
-      ## To sync your SSH to the container, uncomment the following line:
-      #- ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
-      ## Linux only: remove the above lines (except nginx.conf line) and mount the entire src directory with:
-      #- ./src:/var/www/html:cached
-      - ./extensions/services-connector/ServicesConnector:/var/www/html/app/code/Magento/ServicesConnector:consistent
-      - ./extensions/services-id/ServicesId:/var/www/html/app/code/Magento/ServicesId:consistent
-      - ./extensions/data-services/DataServices:/var/www/html/app/code/Magento/DataServices:consistent
-      - ./extensions/data-services/DataServicesMultishipping:/var/www/html/app/code/Magento/DataServicesMultishipping:consistent
-      - ./extensions/commerce-data-export/CatalogDataExporter:/var/www/html/app/code/Magento/CatalogDataExporter:consistent
-      - ./extensions/commerce-data-export/CatalogInventoryDataExporter:/var/www/html/app/code/Magento/CatalogInventoryDataExporter:consistent
-      - ./extensions/commerce-data-export/CatalogUrlRewriteDataExporter:/var/www/html/app/code/Magento/CatalogUrlRewriteDataExporter:consistent
-      - ./extensions/commerce-data-export/ConfigurableProductDataExporter:/var/www/html/app/code/Magento/ConfigurableProductDataExporter:consistent
-      - ./extensions/commerce-data-export/BundleProductDataExporter:/var/www/html/app/code/Magento/BundleProductDataExporter:consistent
-      - ./extensions/commerce-data-export/DataExporter:/var/www/html/app/code/Magento/DataExporter:consistent
-      - ./extensions/commerce-data-export/ParentProductDataExporter:/var/www/html/app/code/Magento/ParentProductDataExporter:consistent
-      - ./extensions/commerce-data-export/ProductVariantDataExporter:/var/www/html/app/code/Magento/ProductVariantDataExporter:consistent
-      - ./extensions/commerce-data-export/QueryXml:/var/www/html/app/code/Magento/QueryXml:consistent
-      - ./extensions/commerce-data-export-ee/ProductOverrideDataExporter:/var/www/html/app/code/Magento/ProductOverrideDataExporter:consistent
-      - ./extensions/saas-export/SaaSCatalog:/var/www/html/app/code/Magento/SaaSCatalog:consistent
-      - ./extensions/saas-export/SaaSCommon:/var/www/html/app/code/Magento/SaaSCommon:consistent
-      - ./extensions/product-recommendations/ProductRecommendationsLayout:/var/www/html/app/code/Magento/ProductRecommendationsLayout:consistent
-      - ./extensions/product-recommendations/PageBuilderProductRecommendations:/var/www/html/app/code/Magento/PageBuilderProductRecommendations:consistent
-      - ./extensions/product-recommendations/VisualProductRecommendations:/var/www/html/app/code/Magento/VisualProductRecommendations:consistent
-      - ./extensions/product-recommendations-admin/ProductRecommendationsAdmin:/var/www/html/app/code/Magento/ProductRecommendationsAdmin:consistent
-      - ./extensions/product-recommendations-admin/ProductRecommendationsSyncAdmin:/var/www/html/app/code/Magento/ProductRecommendationsSyncAdmin:consistent
-      - ./extensions/catalog-sync-admin/CatalogSyncAdmin:/var/www/html/app/code/Magento/CatalogSyncAdmin:consistent
-      - ./extensions/magento-live-search/LiveSearch:/var/www/html/app/code/Magento/LiveSearch:consistent
-      - ./extensions/magento-live-search/LiveSearchAdapter:/var/www/html/app/code/Magento/LiveSearchAdapter:consistent
-      - ./extensions/magento-live-search/LiveSearchStorefrontPopover:/var/www/html/app/code/Magento/LiveSearchStorefrontPopover:consistent
-      - ./extensions/magento-live-search/LiveSearchMetrics:/var/www/html/app/code/Magento/LiveSearchMetrics:consistent
-      - ./extensions/magento-live-search/LiveSearchTerms:/var/www/html/app/code/Magento/LiveSearchTerms:consistent
 
   phpfpm:
     env_file: env/magento.env
     volumes: *appvolumes
-    ## Linux users, see https://github.com/markshust/docker-magento#linux for updates needed below
-    #extra_hosts:
-    #  - "host.docker.internal:IP"
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "1025"
-      - "8025:8025"
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - "8580:80"
-    links:
-      - db
-
-  # Disable if not needed - uses high CPU
-  cron:
-   volumes: *appvolumes
