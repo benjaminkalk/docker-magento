@@ -6,8 +6,6 @@ FULL_HOST_INSTALL_PATH="$PWD/src"
 
 echo "Installing Sample Data..."
 
-bin/cli rm -rf /var/www/html/generated/code
-
 if [[ "$INSTALL_SOURCE" != "git" ]]; then
   bin/setup-composer-auth
   bin/magento sampledata:deploy
