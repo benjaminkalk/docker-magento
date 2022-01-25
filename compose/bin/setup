@@ -80,16 +80,16 @@ if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
   bin/install-sampledata
 fi
 
+echo "Enabling required modules and recompiling..."
 bin/magento module:enable --all
 bin/magento module:disable $DISABLED_MODULES_LIST
-
-#echo "Forcing deploy of static content to speed up initial requests..."
-#bin/clinotty bin/magento setup:static-content:deploy -f
+bin/magento setup:upgrade
+bin/magento setup:di:compile
 
 echo "Re-indexing..."
 bin/magento indexer:reindex
 
-echo "Clearing the cache to apply updates..."
+echo "Clearing the cache..."
 bin/magento cache:flush
 
 echo "Generating SSL certificate..."
