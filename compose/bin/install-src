@@ -1,7 +1,15 @@
 #!/bin/bash
 
+set -o errexit
+
 # shellcheck source=../env/install.env
 source env/install.env
+
+echo ""
+echo "######################################"
+echo "# Installing Magento Commerce source #"
+echo "######################################"
+echo ""
 
 echo "Removing existing src directory..."
 rm -rf src

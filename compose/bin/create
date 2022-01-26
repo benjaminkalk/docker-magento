@@ -1,5 +1,32 @@
 #!/bin/bash
 
+set -o errexit
+
+# shellcheck source=../env/install.env
+source env/install.env
+
+echo ""
+echo "########################################################################"
+echo "# Creating new docker-magento Data Solutions development environnment! #"
+echo "########################################################################"
+echo ""
+
 bin/install-src
-bin/install-datasolutions
+
+if [ -d "$PWD/extensions" ]; then
+  echo ""
+  echo "Data Solutions extensions already exist! Skipping install-datasolutions step..."
+  echo ""
+else
+  echo "Data Solutions modules not installed!"
+  bin/install-datasolutions
+fi
+
 bin/setup
+
+echo ""
+echo "########################################################################"
+echo "# Data Solutions development environnment created!                     #"
+echo "# You may now access your Magento instance at $MAGENTO_BASE_URL        #"
+echo "########################################################################"
+echo ""

@@ -4,13 +4,16 @@ source env/install.env
 
 FULL_HOST_INSTALL_PATH="$PWD/src"
 
-echo "Installing Sample Data..."
+echo ""
+echo "##########################"
+echo "# Installing Sample Data #"
+echo "##########################"
+echo ""
 
 bin/cli rm -rf /var/www/html/generated/code/Magento
 bin/cli rm -rf /var/www/html/generated/code
 
 if [[ "$INSTALL_SOURCE" != "git" ]]; then
-  bin/setup-composer-auth
   bin/magento sampledata:deploy
 else
   git clone --single-branch --branch "$MAGENTO_VERSION" git@github.com:magento/magento2-sample-data "$FULL_HOST_INSTALL_PATH/sample-data"

@@ -2,30 +2,39 @@
 
 set -o errexit
 
-# shellcheck source=../env/db.env
-source env/db.env
-# shellcheck source=../env/elasticsearch.env
-source env/elasticsearch.env
-# shellcheck source=../env/magento.env
-source env/magento.env
-# shellcheck source=../env/rabbitmq.env
-source env/rabbitmq.env
+# shellcheck source=../env/install.env
+source env/install.env
 
+echo ""
+echo "###############################"
+echo "# Setting up Magento Commerce #"
+echo "###############################"
+echo ""
 
-DOMAIN=${1:-magento.test}
-
-bin/stop
-
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --remove-orphans
 docker-compose -f docker-compose.yml up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
 
+echo "Copying all files from host to container..."
+rm -rf src/vendor
+bin/copytocontainer --all
+bin/copytocontainer ~/.composer/auth.json
+bin/clinotty cp /var/www/html/auth.json /var/www/.composer/auth.json
+bin/clinotty [ -d "./var/composer_home" ] && bin/clinotty cp /var/www/.composer/auth.json ./var/composer_home/auth.json
+
 bin/clinotty chmod u+x bin/magento
-rm -rf src && mkdir src
 
-bin/cli chmod u+x bin/magento
+echo "Set up composer auth.json..."
+bin/setup-composer-auth
 
-echo ""
+echo "Running composer install..."
+bin/composer install
+
+echo "Installing Data Solutions composer dev requirements"
+# Install services-connector jwt dependency
+bin/composer require firebase/php-jwt
+# Install live search graphql dependency
+bin/composer require gmostafa/php-graphql-client
+
 echo "Waiting for connection to RabbitMQ..."
 rabbitmqi=10
 until [ $rabbitmqi -le 0 ]; do
@@ -33,23 +42,27 @@ until [ $rabbitmqi -le 0 ]; do
     (( rabbitmqi-- ))
     sleep 2
 done
+echo ""
 
-bin/clinotty bin/magento setup:install \
-  --db-host="$MYSQL_HOST" \
+echo "Setting up Magento..."
+
+bin/magento setup:install \
+  --base-url="$MAGENTO_BASE_URL" \
+  --use-secure="$MAGENTO_USE_SECURE" \
+  --db-host=db \
   --db-name="$MYSQL_DATABASE" \
   --db-user="$MYSQL_USER" \
   --db-password="$MYSQL_PASSWORD" \
-  --base-url=https://"$DOMAIN"/ \
-  --base-url-secure=https://"$DOMAIN"/ \
-  --backend-frontname="$MAGENTO_ADMIN_FRONTNAME" \
-  --admin-firstname="$MAGENTO_ADMIN_FIRST_NAME" \
-  --admin-lastname="$MAGENTO_ADMIN_LAST_NAME" \
-  --admin-email="$MAGENTO_ADMIN_EMAIL" \
-  --admin-user="$MAGENTO_ADMIN_USER" \
-  --admin-password="$MAGENTO_ADMIN_PASSWORD" \
-  --language="$MAGENTO_LOCALE" \
-  --currency="$MAGENTO_CURRENCY" \
+  --backend-frontname="$MAGENTO_BACKEND_FRONTNAME" \
+  --language="$MAGENTO_LANGUAGE" \
   --timezone="$MAGENTO_TIMEZONE" \
+  --currency="$MAGENTO_DEFAULT_CURRENCY" \
+  --use-secure-admin="$MAGENTO_USE_SECURE_ADMIN" \
+  --admin-firstname="$MAGENTO_ADMIN_FIRSTNAME" \
+  --admin-lastname="$MAGENTO_ADMIN_LASTNAME" \
+  --admin-email="$MAGENTO_ADMIN_EMAIL" \
+  --admin-user="$MAGENTO_ADMIN_USERNAME" \
+  --admin-password="$MAGENTO_ADMIN_PASSWORD" \
   --amqp-host="$RABBITMQ_HOST" \
   --amqp-port="$RABBITMQ_PORT" \
   --amqp-user="$RABBITMQ_DEFAULT_USER" \
@@ -71,25 +84,38 @@ bin/clinotty bin/magento setup:install \
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
 
-echo "Forcing deploy of static content to speed up initial requests..."
-bin/clinotty bin/magento setup:static-content:deploy -f
-
 echo "Restarting with docker-compose.dev..."
 bin/restart
 
-echo "Setting basic URL and generating SSL certificate..."
-bin/setup-domain "${DOMAIN}"
+if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
+  bin/install-sampledata
+fi
 
-echo "Clearing the cache to apply updates..."
-bin/clinotty bin/magento cache:flush
+echo "Enabling required modules and recompiling..."
+bin/magento module:enable --all
+bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_AdvancedSearch Magento_InventoryElasticsearch
+bin/magento setup:upgrade
+bin/magento setup:di:compile
 
-echo "Installing cron, run 'bin/cron start' to enable..."
-bin/clinotty bin/magento cron:install
+echo "Reindexing..."
+bin/magento indexer:reindex
 
-echo "Turning on developer mode..."
-bin/clinotty bin/magento deploy:mode:set developer
+echo "Clearing the cache..."
+bin/magento cache:flush
 
-mv .vscode src/
+echo "Installing and enabling cron..."
+bin/magento cron:install
+bin/cron start
 
-echo "Docker development environment setup complete."
-echo "You may now access your Magento instance at https://${DOMAIN}/"
+echo "Turning on developer mode.."
+bin/magento deploy:mode:set developer
+
+echo "Disable XDebug by default..."
+bin/xdebug disable
+
+cp .vscode src/
+
+echo "Generating SSL certificate..."
+bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
+
+echo "Magento Commerce setup complete."

@@ -1,13 +1,21 @@
 #!/bin/bash
 
+set -o errexit
+
 # shellcheck source=../env/install.env
 source env/install.env
+
+echo ""
+echo "########################################"
+echo "# Installing Data Solutions extensions #"
+echo "########################################"
+echo ""
 
 echo "Removing existing extentions..."
 rm -rf extensions
 
 echo "Installing Data Solutions extensions..."
-mkdir extensions
+mkdir -p extensions
 
 # Clone common DS repos to extensions directories
 git clone git@github.com:magento-commerce/services-connector.git extensions/services-connector
