@@ -17,9 +17,6 @@ docker-compose -f docker-compose.yml up -d
 echo "Copying all files from host to container..."
 rm -rf src/vendor
 bin/copytocontainer --all
-bin/copytocontainer ~/.composer/auth.json
-bin/clinotty cp /var/www/html/auth.json /var/www/.composer/auth.json
-bin/clinotty [ -d "./var/composer_home" ] && bin/clinotty cp /var/www/.composer/auth.json ./var/composer_home/auth.json
 
 bin/clinotty chmod u+x bin/magento
 
