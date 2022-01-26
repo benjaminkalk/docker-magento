@@ -110,8 +110,6 @@ bin/magento deploy:mode:set developer
 echo "Disable XDebug by default..."
 bin/xdebug disable
 
-cp .vscode src/
-
 echo "Generating SSL certificate..."
 bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
 
