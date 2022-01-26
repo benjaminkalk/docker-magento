@@ -26,7 +26,7 @@ bin/setup
 
 echo ""
 echo "########################################################################"
-echo "# Data Solutions development environnment created!                     #"
-echo "# You may now access your Magento instance at $MAGENTO_BASE_URL        #"
+echo "# Data Solutions development environnment created!"
+echo "# You may now access your Magento instance at $MAGENTO_BASE_URL"
 echo "########################################################################"
 echo ""
