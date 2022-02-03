@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o errexit
+
 source env/install.env
 
 FULL_HOST_INSTALL_PATH="$PWD/src"
