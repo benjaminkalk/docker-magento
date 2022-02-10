@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o errexit
 
-curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/opinionated/lib/template | bash
+curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/main/lib/template | bash
 
 bin/create

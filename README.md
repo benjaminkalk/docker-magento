@@ -36,7 +36,7 @@ If you have apache, nginx, mysql or php-fpm running locally, be sure to stop the
 
 ```bash
 # Download the Docker Compose template into the specified project directory (Ex. magento2)
-curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/opinionated/lib/template | bash -s -- magento2
+curl -s https://raw.githubusercontent.com/rossbrandon/docker-magento/main/lib/template | bash -s -- magento2
 
 # Configure env/install.env file to specify Magento version, edition, Magento install source, and if you need Luma sample data
 # Example:
