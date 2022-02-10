@@ -1,5 +1,13 @@
 #!/bin/bash
-bin/cleanup
+
+set -o errexit
+
+echo ""
+echo "#######################################################"
+echo "# Destroying Data Solutions development environnment! #"
+echo "#######################################################"
+echo ""
+
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml stop
 docker system prune
 docker volume prune

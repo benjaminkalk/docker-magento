@@ -5,10 +5,11 @@ set -o errexit
 # shellcheck source=../env/install.env
 source env/install.env
 
-ES_HOST=elasticsearch
-ES_PORT=9200
-
-bin/stop
+echo ""
+echo "###############################"
+echo "# Setting up Magento Commerce #"
+echo "###############################"
+echo ""
 
 docker-compose -f docker-compose.yml up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
@@ -17,24 +18,31 @@ echo "Copying all files from host to container..."
 rm -rf src/vendor
 bin/copytocontainer --all
 
-bin/cli chmod u+x bin/magento
+bin/clinotty chmod u+x bin/magento
 
-echo "Waiting for connection to local Elasticsearch..."
-bin/cli timeout 100 bash -c "
-    until curl --silent --output /dev/null http://$ES_HOST:$ES_PORT/_cat/health?h=st; do
-        printf '.'
-        sleep 2
-    done"
-[ $? != 0 ] && echo "Failed to connect to Elasticsearch" && exit
-echo "Local Elasticsearch connection succeeded..."
-
-echo "Ensuring Composer auth.json is setup..."
+echo "Set up composer auth.json..."
 bin/setup-composer-auth
 
-echo "Forcing reinstall of composer deps to ensure perms & reqs..."
+echo "Running composer install..."
 bin/composer install
 
+echo "Installing Data Solutions composer dev requirements"
+# Install services-connector jwt dependency
+bin/composer require firebase/php-jwt
+# Install live search graphql dependency
+bin/composer require gmostafa/php-graphql-client
+
+echo "Waiting for connection to RabbitMQ..."
+rabbitmqi=10
+until [ $rabbitmqi -le 0 ]; do
+    printf '.'
+    (( rabbitmqi-- ))
+    sleep 2
+done
+echo ""
+
 echo "Setting up Magento..."
+
 bin/magento setup:install \
   --base-url="$MAGENTO_BASE_URL" \
   --use-secure="$MAGENTO_USE_SECURE" \
@@ -52,11 +60,11 @@ bin/magento setup:install \
   --admin-email="$MAGENTO_ADMIN_EMAIL" \
   --admin-user="$MAGENTO_ADMIN_USERNAME" \
   --admin-password="$MAGENTO_ADMIN_PASSWORD" \
-  --amqp-host=rabbitmq \
-  --amqp-port=5672 \
-  --amqp-user=guest \
-  --amqp-password=guest \
-  --amqp-virtualhost=/ \
+  --amqp-host="$RABBITMQ_HOST" \
+  --amqp-port="$RABBITMQ_PORT" \
+  --amqp-user="$RABBITMQ_DEFAULT_USER" \
+  --amqp-password="$RABBITMQ_DEFAULT_PASS" \
+  --amqp-virtualhost="$RABBITMQ_DEFAULT_VHOST" \
   --cache-backend=redis \
   --cache-backend-redis-server=redis \
   --cache-backend-redis-db=0 \
@@ -67,39 +75,42 @@ bin/magento setup:install \
   --session-save-redis-host=redis \
   --session-save-redis-log-level=4 \
   --session-save-redis-db=2 \
-  --search-engine=elasticsearch7 \
-  --elasticsearch-host="$ES_HOST" \
-  --elasticsearch-port="$ES_PORT" \
-  --use-rewrites=1
-if [[ "$MAGENTO_EDITION" == "commerce" ]]; then \
-  --disable-modules="$MAGENTO_COMMERCE_DISABLED_MODULES"
-fi
+  --use-rewrites=1 \
+  --disable-modules=Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7,Magento_ElasticsearchCatalogPermissions,Magento_AdvancedSearch,Magento_InventoryElasticsearch
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
 
-echo "Turning on developer mode.."
-bin/cli rm -rf /var/www/html/generated/code
-bin/magento deploy:mode:set developer
+echo "Restarting with docker-compose.dev..."
+bin/restart
 
 if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
   bin/install-sampledata
 fi
 
-#echo "Forcing deploy of static content to speed up initial requests..."
-#bin/clinotty bin/magento setup:static-content:deploy -f
+echo "Enabling required modules and recompiling..."
+bin/magento module:enable --all
+bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_AdvancedSearch Magento_InventoryElasticsearch
+bin/magento setup:upgrade
+bin/magento setup:di:compile
 
-echo "Re-indexing with Elasticsearch..."
+echo "Reindexing..."
 bin/magento indexer:reindex
 
-echo "Clearing the cache to apply updates..."
+echo "Clearing the cache..."
 bin/magento cache:flush
 
-echo "Generating SSL certificate..."
-bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
+echo "Installing and enabling cron..."
+bin/magento cron:install
+bin/cron start
+
+echo "Turning on developer mode.."
+bin/magento deploy:mode:set developer
 
 echo "Disable XDebug by default..."
 bin/xdebug disable
 
-echo "Docker development environment setup complete."
-echo "You may now access your Magento instance at $MAGENTO_BASE_URL"
+echo "Generating SSL certificate..."
+bin/setup-ssl "$(basename "$MAGENTO_BASE_URL")"
+
+echo "Magento Commerce setup complete."
