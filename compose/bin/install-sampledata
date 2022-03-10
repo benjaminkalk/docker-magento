@@ -27,7 +27,7 @@ else
   bin/clinotty php -f /var/www/html/magento2ee/sample-data-ee/dev/tools/build-sample-data.php -- --ce-source=/var/www/html --ee-source=/var/www/html/magento2ee
 fi
 
-bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_AdvancedSearch Magento_InventoryElasticsearch
+bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento cache:clean
