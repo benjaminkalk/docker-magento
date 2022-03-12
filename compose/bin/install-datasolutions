@@ -21,6 +21,7 @@ mkdir -p extensions
 git clone git@github.com:magento-commerce/services-connector.git extensions/services-connector
 git clone git@github.com:magento-commerce/data-services.git extensions/data-services
 git clone git@github.com:magento-commerce/services-id.git extensions/services-id
+git clone git@github.com:magento-commerce/data-solutions-magento-bff.git
 git clone git@github.com:magento-commerce/saas-export.git extensions/saas-export
 git clone git@github.com:magento-commerce/commerce-data-export.git extensions/commerce-data-export
 git clone git@github.com:magento-commerce/commerce-data-export-ee.git extensions/commerce-data-export-ee

@@ -76,7 +76,7 @@ bin/magento setup:install \
   --session-save-redis-log-level=4 \
   --session-save-redis-db=2 \
   --use-rewrites=1 \
-  --disable-modules=Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7,Magento_ElasticsearchCatalogPermissions,Magento_InventoryElasticsearch
+  --disable-modules=Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch6,Magento_Elasticsearch7,Magento_ElasticsearchCatalogPermissions,Magento_InventoryElasticsearch,Magento_ElasticsearchCatalogPermissionsGraphQl
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
@@ -88,9 +88,13 @@ if [[ "$INSTALL_SAMPLE_DATA" == true ]]; then
   bin/install-sampledata
 fi
 
+if [[ "$INSTALL_B2B" == true ]]; then
+  bin/install-b2b
+fi
+
 echo "Enabling required modules and recompiling..."
 bin/magento module:enable --all
-bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch
+bin/magento module:disable Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch6 Magento_Elasticsearch7 Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch Magento_ElasticsearchCatalogPermissionsGraphQl
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 
