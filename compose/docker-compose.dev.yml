@@ -45,7 +45,7 @@ services:
       - ./extensions/magento-live-search/LiveSearchTerms:/var/www/html/app/code/Magento/LiveSearchTerms:consistent
       - ./extensions/data-solutions-magento-bff/GraphQlServer:/var/www/html/app/code/Magento/GraphQlServer:consistent
       - ./extensions/data-solutions-magento-bff/AdminGraphQlServer:/var/www/html/app/code/Magento/AdminGraphQlServer:consistent
-      - ./extensions/data-solutions-magento-bff/ExternalSchemaGraphQlServer:/var/www/html/app/code/Magento/ExternalSchemaGraphQlServer:consistent
+      #- ./extensions/data-solutions-magento-bff/ExternalSchemaGraphQlServer:/var/www/html/app/code/Magento/ExternalSchemaGraphQlServer:consistent
 
   phpfpm:
     env_file: env/magento.env
