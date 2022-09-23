@@ -18,7 +18,7 @@ This is a customized repository forked from https://github.com/markshust/docker-
     - [Email / Mailcatcher](#email--mailcatcher)
     - [Redis](#redis)
     - [Xdebug & VS Code](#xdebug--vs-code)
-      - [Xdebug & PHPStorm](#xdebug--phpstorm)
+    - [Xdebug & PHPStorm](#xdebug--phpstorm)
     - [SSH](#ssh)
     - [Linux](#linux)
       - [The host.docker.internal hostname](#the-hostdockerinternal-hostname)
