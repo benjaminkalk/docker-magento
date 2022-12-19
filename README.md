@@ -227,6 +227,7 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
         - `<path_to_project>/extensions/data-services/DataServicesMultishipping` -> `/var/www/html/app/code/Magento/DataServicesMultishipping`
         - `<path_to_project>/extensions/services-id/ServicesId` -> `/var/www/html/app/code/Magento/ServicesId`
         - `<path_to_project>/extensions/services-id/ServicesIdGraphQlServer` -> `/var/www/html/app/code/Magento/ServicesIdGraphQlServer`
+        - `<path_to_project>/extensions/services-id/ServicesIdLayout` -> `/var/www/html/app/code/Magento/ServicesIdLayout`
         - `<path_to_project>/extensions/services-connector/ServicesConnector` -> `/var/www/html/app/code/Magento/ServicesConnector`
         - `<path_to_project>/extensions/product-recommendations/ProductRecommendations` -> `/var/www/html/app/code/Magento/ProductRecommendations`
         - `<path_to_project>/extensions/product-recommendations/ProductRecommendationsLayout` -> `/var/www/html/app/code/Magento/ProductRecommendationsLayout`
@@ -273,6 +274,7 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
      - `./extensions/data-services/DataServicesMultishipping` -> `/var/www/html/app/code/Magento/DataServicesMultishipping`
      - `./extensions/services-id/ServicesId` -> `/var/www/html/app/code/Magento/ServicesId`
      - `./extensions/services-id/ServicesIdGraphQlServer` -> `/var/www/html/app/code/Magento/services-id/ServicesIdGraphQlServer`
+     - `./extensions/services-id/ServicesIdLayout` -> `/var/www/html/app/code/Magento/services-id/ServicesIdLayout`
      - `./extensions/services-connector/ServicesConnector` -> `/var/www/html/app/code/Magento/services-connector/ServicesConnector`
      - `./extensions/product-recommendations/ProductRecommendations` -> `/var/www/html/app/code/Magento/ProductRecommendations`
      - `./extensions/product-recommendations/ProductRecommendationsLayout` -> `/var/www/html/app/code/Magento/ProductRecommendationsLayout`
