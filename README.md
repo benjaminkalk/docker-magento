@@ -18,7 +18,7 @@ This is a customized repository forked from https://github.com/markshust/docker-
     - [Email / Mailcatcher](#email--mailcatcher)
     - [Redis](#redis)
     - [Xdebug & VS Code](#xdebug--vs-code)
-      - [Xdebug & PHPStorm](#xdebug--phpstorm)
+    - [Xdebug & PHPStorm](#xdebug--phpstorm)
     - [SSH](#ssh)
     - [Linux](#linux)
       - [The host.docker.internal hostname](#the-hostdockerinternal-hostname)
@@ -204,7 +204,7 @@ Install and enable the PHP Debug extension from the [Visual Studio Marketplace](
 
 Otherwise, this project now automatically sets up Xdebug support with VS Code. If you wish to set this up manually, please see the [`.vscode/launch.json`](https://github.com/markshust/docker-magento/blame/master/compose/.vscode/launch.json) file.
 
-#### Xdebug & PHPStorm
+### Xdebug & PHPStorm
 
 1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PhpStorm from the list to set the IDE Key to "PHPSTORM", then click Save.
 
@@ -222,40 +222,39 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
 
     - `Path mappings`
       - Add the following path mappings (`Local Path` -> `Remote Path`):
-        - `/var/www/html` -> `<path_to_project>/src`
-        - `/var/www/html/app/code/Magento/DataServices` -> `<path_to_project>/extensions/data-services/DataServices`
-        - `/var/www/html/app/code/Magento/DataServicesMultishipping` -> `<path_to_project>/extensions/data-services/DataServicesMultishipping`
-        - `/var/www/html/app/code/Magento/ServicesId` -> `<path_to_project>/extensions/services-id/ServicesId`
-        - `/var/www/html/app/code/Magento/ServicesIdGraphQlServer` -> `<path_to_project>/extensions/services-id/ServicesIdGraphQlServer`
-        - `/var/www/html/app/code/Magento/ServicesIdLayout` -> `<path_to_project>/extensions/services-id/ServicesIdLayout`
-        - `/var/www/html/app/code/Magento/ServicesConnector` -> `<path_to_project>/extensions/services-connector/ServicesConnector`
-        - `/var/www/html/app/code/Magento/ProductRecommendations` -> `<path_to_project>/extensions/product-recommendations/ProductRecommendations`
-        - `/var/www/html/app/code/Magento/ProductRecommendationsLayout` -> `<path_to_project>/extensions/product-recommendations/ProductRecommendationsLayout`
-        - `/var/www/html/app/code/Magento/PageBuilderProductRecommendations` -> `<path_to_project>/extensions/product-recommendations/PageBuilderProductRecommendations`
-        - `/var/www/html/app/code/Magento/VisualProductRecommendations` -> `<path_to_project>/extensions/product-recommendations/VisualProductRecommendations`
-        - `/var/www/html/app/code/Magento/ProductRecommendationsAdmin` -> `<path_to_project>/extensions/product-recommendations-admin/ProductRecommendationsAdmin`
-        - `/var/www/html/app/code/Magento/ProductRecommendationsSyncAdmin` -> `<path_to_project>/extensions/product-recommendations-admin/ProductRecommendationsSyncAdmin`
-        - `/var/www/html/app/code/Magento/CatalogSyncAdmin` -> `<path_to_project>/extensions/catalog-sync-admin/CatalogSyncAdmin`
-        - `/var/www/html/app/code/Magento/BundleProductDataExporter` -> `<path_to_project>/extensions/commerce-data-export/BundleProductDataExporter`
-        - `/var/www/html/app/code/Magento/CatalogDataExporter` -> `<path_to_project>/extensions/commerce-data-export/CatalogDataExporter`
-        - `/var/www/html/app/code/Magento/CatalogInventoryDataExporter` -> `<path_to_project>/extensions/commerce-data-export/CatalogInventoryDataExporter`
-        - `/var/www/html/app/code/Magento/CatalogUrlRewriteDataExporter` -> `<path_to_project>/extensions/commerce-data-export/CatalogUrlRewriteDataExporter`
-        - `/var/www/html/app/code/Magento/ConfigurableProductDataExporter` -> `<path_to_project>/extensions/commerce-data-export/ConfigurableProductDataExporter`
-        - `/var/www/html/app/code/Magento/DataExporter` -> `<path_to_project>/extensions/commerce-data-export/DataExporter`
-        - `/var/www/html/app/code/Magento/QueryXml` -> `<path_to_project>/extensions/commerce-data-export/QueryXml`
-        - `/var/www/html/app/code/Magento/ParentProductDataExporter` -> `<path_to_project>/extensions/commerce-data-export/ParentProductDataExporter`
-        - `/var/www/html/app/code/Magento/ProductVariantDataExporter` -> `<path_to_project>/extensions/commerce-data-export/ProductVariantDataExporter`
-        - `/var/www/html/app/code/Magento/ProductOverrideDataExporter` -> `<path_to_project>/extensions/commerce-data-export-ee/ProductOverrideDataExporter`
-        - `/var/www/html/app/code/Magento/SaaSCatalog` -> `<path_to_project>/extensions/saas-export/SaaSCatalog`
-        - `/var/www/html/app/code/Magento/SaaSCommon` -> `<path_to_project>/extensions/saas-exportSaaSCommon`
-        - `/var/www/html/app/code/Magento/LiveSearch` -> `<path_to_project>/extensions/magento-live-search/LiveSearch`
-        - `/var/www/html/app/code/Magento/LiveSearchAdapter` -> `<path_to_project>/extensions/magento-live-search/LiveSearchAdapter`
-        - `/var/www/html/app/code/Magento/LiveSearchMetrics` -> `<path_to_project>/extensions/magento-live-search/LiveSearchMetrics`
-        - `/var/www/html/app/code/Magento/LiveSearchStorefrontPopover` -> `<path_to_project>/extensions/magento-live-search/LiveSearchStorefrontPopover`
-        - `/var/www/html/app/code/Magento/LiveSearchTerms` -> `<path_to_project>/extensions/magento-live-search/LiveSearchTerms`
-        - `/var/www/html/app/code/Magento/GraphQlServer` -> `<path_to_project>/extensions/data-solutions-magento-bff/GraphQlServer`
-        - `/var/www/html/app/code/Magento/AdminGraphQlServer` -> `<path_to_project>/extensions/data-solutions-magento-bff/AdminGraphQlServer`
-        - `/var/www/html/app/code/Magento/ExternalSchemaGraphQlServer` -> `<path_to_project>/extensions/data-solutions-magento-bff/ExternalSchemaGraphQlServer`
+        - `<path_to_project>/src` -> `/var/www/html`
+        - `<path_to_project>/extensions/data-services/DataServices` -> `/var/www/html/app/code/Magento/DataServices`
+        - `<path_to_project>/extensions/data-services/DataServicesMultishipping` -> `/var/www/html/app/code/Magento/DataServicesMultishipping`
+        - `<path_to_project>/extensions/services-id/ServicesId` -> `/var/www/html/app/code/Magento/ServicesId`
+        - `<path_to_project>/extensions/services-id/ServicesIdGraphQlServer` -> `/var/www/html/app/code/Magento/ServicesIdGraphQlServer`
+        - `<path_to_project>/extensions/services-connector/ServicesConnector` -> `/var/www/html/app/code/Magento/ServicesConnector`
+        - `<path_to_project>/extensions/product-recommendations/ProductRecommendations` -> `/var/www/html/app/code/Magento/ProductRecommendations`
+        - `<path_to_project>/extensions/product-recommendations/ProductRecommendationsLayout` -> `/var/www/html/app/code/Magento/ProductRecommendationsLayout`
+        - `<path_to_project>/extensions/product-recommendations/PageBuilderProductRecommendations` -> `/var/www/html/app/code/Magento/PageBuilderProductRecommendations`
+        - `<path_to_project>/extensions/product-recommendations/VisualProductRecommendations` -> `/var/www/html/app/code/Magento/VisualProductRecommendations`
+        - `<path_to_project>/extensions/product-recommendations-admin/ProductRecommendationsAdmin` -> `/var/www/html/app/code/Magento/ProductRecommendationsAdmin`
+        - `<path_to_project>/extensions/product-recommendations-admin/ProductRecommendationsSyncAdmin` -> `/var/www/html/app/code/Magento/ProductRecommendationsSyncAdmin`
+        - `<path_to_project>/extensions/catalog-sync-admin/CatalogSyncAdmin` -> `/var/www/html/app/code/Magento/CatalogSyncAdmin`
+        - `<path_to_project>/extensions/commerce-data-export/BundleProductDataExporter` -> `/var/www/html/app/code/Magento/BundleProductDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/CatalogDataExporter` -> `/var/www/html/app/code/Magento/CatalogDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/CatalogInventoryDataExporter` -> `/var/www/html/app/code/Magento/CatalogInventoryDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/CatalogUrlRewriteDataExporter` -> `/var/www/html/app/code/Magento/CatalogUrlRewriteDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/ConfigurableProductDataExporter` -> `/var/www/html/app/code/Magento/ConfigurableProductDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/DataExporter` -> `/var/www/html/app/code/Magento/DataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/QueryXml` -> `/var/www/html/app/code/Magento/QueryXml`
+        - `<path_to_project>/extensions/commerce-data-export/ParentProductDataExporter` -> `/var/www/html/app/code/Magento/ParentProductDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/ProductVariantDataExporter` -> `/var/www/html/app/code/Magento/ProductVariantDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export-ee/ProductOverrideDataExporter` -> `/var/www/html/app/code/Magento/ProductOverrideDataExporter`
+        - `<path_to_project>/extensions/saas-export/SaaSCatalog` -> `/var/www/html/app/code/Magento/SaaSCatalog`
+        - `<path_to_project>/extensions/saas-exportSaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
+        - `<path_to_project>/extensions/magento-live-search/LiveSearch` -> `/var/www/html/app/code/Magento/LiveSearch`
+        - `<path_to_project>/extensions/magento-live-search/LiveSearchAdapter` -> `/var/www/html/app/code/Magento/LiveSearchAdapter`
+        - `<path_to_project>/extensions/magento-live-search/LiveSearchMetrics` -> `/var/www/html/app/code/Magento/LiveSearchMetrics`
+        - `<path_to_project>/extensions/magento-live-search/LiveSearchStorefrontPopover` -> `/var/www/html/app/code/Magento/LiveSearchStorefrontPopover`
+        - `<path_to_project>/extensions/magento-live-search/LiveSearchTerms` -> `/var/www/html/app/code/Magento/LiveSearchTerms`
+        - `<path_to_project>/extensions/data-solutions-magento-bff/GraphQlServer` -> `/var/www/html/app/code/Magento/GraphQlServer`
+        - `<path_to_project>/extensions/data-solutions-magento-bff/AdminGraphQlServer` -> `/var/www/html/app/code/Magento/AdminGraphQlServer`
+        - `<path_to_project>/extensions/data-solutions-magento-bff/ExternalSchemaGraphQlServer` -> `/var/www/html/app/code/Magento/ExternalSchemaGraphQlServer`
 
 ![PHPStorm Docker Mappings](docs/docker_mappings.png)
 
@@ -274,7 +273,6 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
      - `./extensions/data-services/DataServicesMultishipping` -> `/var/www/html/app/code/Magento/DataServicesMultishipping`
      - `./extensions/services-id/ServicesId` -> `/var/www/html/app/code/Magento/ServicesId`
      - `./extensions/services-id/ServicesIdGraphQlServer` -> `/var/www/html/app/code/Magento/services-id/ServicesIdGraphQlServer`
-     - `./extensions/services-id/ServicesIdLayout` -> `/var/www/html/app/code/Magento/services-id/ServicesIdLayout`
      - `./extensions/services-connector/ServicesConnector` -> `/var/www/html/app/code/Magento/services-connector/ServicesConnector`
      - `./extensions/product-recommendations/ProductRecommendations` -> `/var/www/html/app/code/Magento/ProductRecommendations`
      - `./extensions/product-recommendations/ProductRecommendationsLayout` -> `/var/www/html/app/code/Magento/ProductRecommendationsLayout`
