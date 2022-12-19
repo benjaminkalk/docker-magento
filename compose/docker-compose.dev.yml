@@ -18,6 +18,7 @@ services:
       - ./extensions/services-connector/ServicesConnector:/var/www/html/app/code/Magento/ServicesConnector:consistent
       - ./extensions/services-id/ServicesId:/var/www/html/app/code/Magento/ServicesId:consistent
       - ./extensions/services-id/ServicesIdGraphQlServer:/var/www/html/app/code/Magento/ServicesIdGraphQlServer:consistent
+      - ./extensions/services-id/ServicesIdLayout:/var/www/html/app/code/Magento/ServicesIdLayout:consistent
       - ./extensions/data-services/DataServices:/var/www/html/app/code/Magento/DataServices:consistent
       - ./extensions/data-services/DataServicesMultishipping:/var/www/html/app/code/Magento/DataServicesMultishipping:consistent
       - ./extensions/commerce-data-export/CatalogDataExporter:/var/www/html/app/code/Magento/CatalogDataExporter:consistent
