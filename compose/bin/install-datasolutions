@@ -51,8 +51,8 @@ if [[ "$SAAS_ENVIRONMENT" == "qa" ]]; then
   sed -i '' -e 's/commerce.adobe.net/catalog-sync-ui-qa.magento-datasolutions.com/g' extensions/catalog-sync-admin/CatalogSyncAdmin/etc/config.xml
 
   echo "Setting QA URLs in csp_whitelist.xml files..."
-  sed -i '' -e 's/api.magento.com/qa-api.magedevteam.com/g' extensions/services-id/ServicesId/etc/csp_whitelist.xml
-  sed -i '' -e 's/commerce.adobe.io/commerce-int.adobe.io/g' extensions/services-id/ServicesId/etc/csp_whitelist.xml
+  sed -i '' -e 's/api.magento.com/qa-api.magedevteam.com/g' extensions/services-id/ServicesIdLayout/etc/csp_whitelist.xml
+  sed -i '' -e 's/commerce.adobe.io/commerce-int.adobe.io/g' extensions/services-id/ServicesIdLayout/etc/csp_whitelist.xml
   sed -i '' -e 's/commerce.adobedtm.com/js.magento-datasolutions.com/g' extensions/data-services/DataServices/etc/csp_whitelist.xml
   sed -i '' -e 's/commerce.adobedc.net/com-magento-qa1.collector.snplow.net/g' extensions/data-services/DataServices/etc/csp_whitelist.xml
 
