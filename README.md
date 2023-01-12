@@ -248,8 +248,8 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
         - `<path_to_project>/extensions/commerce-data-export/ScopesDataExporter` -> `/var/www/html/app/code/Magento/ScopesDataExporter`
         - `<path_to_project>/extensions/commerce-data-export-ee/ProductOverrideDataExporter` -> `/var/www/html/app/code/Magento/ProductOverrideDataExporter`
         - `<path_to_project>/extensions/saas-export/SaaSCatalog` -> `/var/www/html/app/code/Magento/SaaSCatalog`
-        - `<path_to_project>/extensions/saas-exportSaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
-        - `<path_to_project>/extensions/saas-exportSaaSScopes` -> `/var/www/html/app/code/Magento/SaaSScopes`
+        - `<path_to_project>/extensions/saas-export/SaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
+        - `<path_to_project>/extensions/saas-export/SaaSScopes` -> `/var/www/html/app/code/Magento/SaaSScopes`
         - `<path_to_project>/extensions/magento-live-search/LiveSearch` -> `/var/www/html/app/code/Magento/LiveSearch`
         - `<path_to_project>/extensions/magento-live-search/LiveSearchAdapter` -> `/var/www/html/app/code/Magento/LiveSearchAdapter`
         - `<path_to_project>/extensions/magento-live-search/LiveSearchMetrics` -> `/var/www/html/app/code/Magento/LiveSearchMetrics`
