@@ -30,9 +30,11 @@ services:
       - ./extensions/commerce-data-export/ParentProductDataExporter:/var/www/html/app/code/Magento/ParentProductDataExporter:consistent
       - ./extensions/commerce-data-export/ProductVariantDataExporter:/var/www/html/app/code/Magento/ProductVariantDataExporter:consistent
       - ./extensions/commerce-data-export/QueryXml:/var/www/html/app/code/Magento/QueryXml:consistent
+      - ./extensions/commerce-data-export/ScopesDataExporter:/var/www/html/app/code/Magento/ScopesDataExporter:consistent
       - ./extensions/commerce-data-export-ee/ProductOverrideDataExporter:/var/www/html/app/code/Magento/ProductOverrideDataExporter:consistent
       - ./extensions/saas-export/SaaSCatalog:/var/www/html/app/code/Magento/SaaSCatalog:consistent
       - ./extensions/saas-export/SaaSCommon:/var/www/html/app/code/Magento/SaaSCommon:consistent
+      - ./extensions/saas-export/SaaSScopes:/var/www/html/app/code/Magento/SaaSScopes:consistent
       - ./extensions/product-recommendations/ProductRecommendationsLayout:/var/www/html/app/code/Magento/ProductRecommendationsLayout:consistent
       - ./extensions/product-recommendations/PageBuilderProductRecommendations:/var/www/html/app/code/Magento/PageBuilderProductRecommendations:consistent
       - ./extensions/product-recommendations/VisualProductRecommendations:/var/www/html/app/code/Magento/VisualProductRecommendations:consistent
@@ -51,3 +53,22 @@ services:
   phpfpm:
     env_file: env/magento.env
     volumes: *appvolumes
+
+## ####################################################################################################
+## Uncomment the lines below to add 'Elastic Search' to run integration tests in local dev environment
+## Some integration tests require a running instance of elastic search, otherwise, will break.
+## ####################################################################################################
+#  elastic:
+#    image: elasticsearch:7.9.3
+#    hostname: elastic
+#    ports:
+#      - "9200:9200"
+#    environment:
+#      - cluster.name=docker-cluster
+#      - bootstrap.memory_lock=true
+#      - discovery.type=single-node
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1

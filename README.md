@@ -37,14 +37,14 @@ Although this is a docker solution, your host machine will need the following:
 - Docker Desktop
 - PHP version 8.1
 - Composer version 2
-- Composer keys with access to Adobe Commerce (Magento 2 EE/B2B) on repo.magento.com or connect20-qa01.magedevteam.com
-  - During the install, you may be prompted to enter these keys. They can be found on your [Marketplace Account](https://marketplace.magento.com/customer/accessKeys/)
+- Composer keys with access to Adobe Commerce (Magento 2 EE/B2B) on `repo.magento.com` or `connect20-qa01.magedevteam.com`
+  - During the installation, you may be prompted to enter these keys. They can be found on your [Marketplace Account](https://marketplace.magento.com/customer/accessKeys/)
 - Github Access to the [magento-commerce](https://github.com/magento-commerce) organization
 
 #### Templated Install
 
 Before running, make sure you do not have any server running on ports 80, 443, 3306 or 9000.
-If you have apache, nginx, mysql or php-fpm running locally, be sure to stop these services so that install does not fail
+If you have apache, nginx, mysql or php-fpm running locally, be sure to stop these services so that installation does not fail
 
 ```bash
 # Download the Docker Compose template into the specified project directory (Ex. magento2)
@@ -66,6 +66,20 @@ bin/create
 # Open site
 open https://magento2.test
 ```
+
+#### Running Integration Tests in local development enviroment.
+
+Follow the next steps to configure the execution of integration tests, after installing magento:
+
+1. Edit `../docker-compose.dev.yml` and uncomment the section where elastic search is added as a container.
+2. Restart the docker containers: `bin/restart`
+3. Setup integration tests configuration: `bin/setup-integration-tests`. This will create configuration files and move them to the container.
+4. Run all the integration tests: `bin/dev-test-run integration` 
+4.1. To run a given integration test use: `bin/dev-test-run integration ../../../app/code/Magento/${Module}/Test/Integration/${TestFile}.php`. Please note that the path corresponds to the container's file system. 
+4.2. To use magento's cli to run the integration tests instead, follow the next steps:
+4.2.1. Copy `src/dev/tests/integration/phpunit.xml.dist` to `src/dev/tests/integration/phpunit.xml`
+4.2.2  Move `phpunit.xml` to the container: `bin/copytocontainer dev/tests/integration/phpunit.xml`. Note the path does not include 'src/'.
+4.2.3. Run `bin/magento dev:tests:run integration`.
 
 ---
 
@@ -108,6 +122,7 @@ open https://magento2.test
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
 - `bin/setup`: Existing script but was customized to fit Data Solutions developer use cases and driven by `env/install.env` configuration
+- `bin/setup-integration-tests`: Use it to create/update the configuration files required to run integration tests. It copies them to the container.  
 - `bin/setup-grunt`: Install and configure Grunt JavaScript task runner to compile .less files
 - `bin/setup-pwa-studio`: (BETA) Install PWA Studio (requires NodeJS and Yarn to be installed on the host machine). Pass in your base site domain, otherwise the default `magento2.test` will be used. Ex: `bin/setup-pwa-studio magento2.test`
 - `bin/setup-composer-auth`: Setup authentication credentials for Composer.
@@ -127,7 +142,7 @@ open https://magento2.test
 
 ### Caching
 
-For an improved developer experience, caches are automatically refreshed when related files are updated, courtesy of [cache-clean](https://github.com/mage2tv/magento-cache-clean). This means you can keep all of the standard Magento caches enabled, and this script will only clear the specific caches needed, and only when necessary.
+For an improved developer experience, caches are automatically refreshed when related files are updated, courtesy of [cache-clean](https://github.com/mage2tv/magento-cache-clean). This means you can keep all the standard Magento caches enabled, and this script will only clear the specific caches needed, and only when necessary.
 
 To disable this functionality, uncomment the last line in the `bin/start` file to disable the watcher.
 
@@ -180,7 +195,7 @@ View emails sent locally through Mailcatcher by visiting [http://{yourdomain}:10
 
 Redis is now the default cache and session storage engine, and is automatically configured & enabled when running `bin/setup` on new installs.
 
-Use the following lines to enable Redis on existing installs:
+Use the following lines to enable Redis on existing installations:
 
 **Enable for Cache:**
 
@@ -245,9 +260,11 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
         - `<path_to_project>/extensions/commerce-data-export/QueryXml` -> `/var/www/html/app/code/Magento/QueryXml`
         - `<path_to_project>/extensions/commerce-data-export/ParentProductDataExporter` -> `/var/www/html/app/code/Magento/ParentProductDataExporter`
         - `<path_to_project>/extensions/commerce-data-export/ProductVariantDataExporter` -> `/var/www/html/app/code/Magento/ProductVariantDataExporter`
+        - `<path_to_project>/extensions/commerce-data-export/ScopesDataExporter` -> `/var/www/html/app/code/Magento/ScopesDataExporter`
         - `<path_to_project>/extensions/commerce-data-export-ee/ProductOverrideDataExporter` -> `/var/www/html/app/code/Magento/ProductOverrideDataExporter`
         - `<path_to_project>/extensions/saas-export/SaaSCatalog` -> `/var/www/html/app/code/Magento/SaaSCatalog`
-        - `<path_to_project>/extensions/saas-exportSaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
+        - `<path_to_project>/extensions/saas-export/SaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
+        - `<path_to_project>/extensions/saas-export/SaaSScopes` -> `/var/www/html/app/code/Magento/SaaSScopes`
         - `<path_to_project>/extensions/magento-live-search/LiveSearch` -> `/var/www/html/app/code/Magento/LiveSearch`
         - `<path_to_project>/extensions/magento-live-search/LiveSearchAdapter` -> `/var/www/html/app/code/Magento/LiveSearchAdapter`
         - `<path_to_project>/extensions/magento-live-search/LiveSearchMetrics` -> `/var/www/html/app/code/Magento/LiveSearchMetrics`
@@ -291,9 +308,11 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
      - `./extensions/commerce-data-export/app/code/Magento/DataExporter` -> `/var/www/html/app/code/Magento/DataExporter`
      - `./extensions/commerce-data-export/app/code/Magento/ParentProductDataExporter` -> `/var/www/html/app/code/Magento/ParentProductDataExporter`
      - `./extensions/commerce-data-export/app/code/Magento/ProductVariantDataExporter` -> `/var/www/html/app/code/Magento/ProductVariantDataExporter`
+     - `./extensions/commerce-data-export/app/code/Magento/ScopesDataExporter` -> `/var/www/html/app/code/Magento/ScopesDataExporter`
      - `./extensions/commerce-data-export-ee/app/code/Magento/ProductOverrideDataExporter` -> `/var/www/html/app/code/Magento/ProductOverrideDataExporter`
      - `./extensions/saas-export/app/code/Magento/SaaSCatalog` -> `/var/www/html/app/code/Magento/SaaSCatalog`
      - `./extensions/saas-export/app/code/Magento/SaaSCommon` -> `/var/www/html/app/code/Magento/SaaSCommon`
+     - `./extensions/saas-export/app/code/Magento/SaaSScopes` -> `/var/www/html/app/code/Magento/SaaSScopes`
      - `./extensions/magento-live-search/app/code/Magento/LiveSearch` -> `/var/www/html/app/code/Magento/LiveSearch`
      - `./extensions/magento-live-search/app/code/Magento/LiveSearchAdapter` -> `/var/www/html/app/code/Magento/LiveSearchAdapter`
      - `./extensions/magento-live-search/app/code/Magento/LiveSearchMetrics` -> `/var/www/html/app/code/Magento/LiveSearchMetrics`
