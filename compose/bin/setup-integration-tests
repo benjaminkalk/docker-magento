@@ -20,3 +20,11 @@ if [[ ! -f "src/${MYSQL_INTEGRATION_CONFIG}" ]]; then
 fi
 
 bin/copytocontainer ${MYSQL_INTEGRATION_CONFIG}
+
+PHPUNIT_CONFIG=dev/tests/integration/phpunit.xml.dist
+# Uploads the phpunit.xml.dist file in the container in case it has changes.
+# TODO: update 'bin/dev-test-run' to use 'phpunit.xml' instead of 'phpunit.xml.dist' and fix this script to add
+# a check to create 'phpunit.xml' in case it doesn't exist based on phpunit.xml.dist.
+if [[ -f "src/${PHPUNIT_CONFIG}" ]]; then
+  bin/copytocontainer ${PHPUNIT_CONFIG}
+fi

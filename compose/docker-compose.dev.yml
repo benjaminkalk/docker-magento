@@ -54,18 +54,21 @@ services:
     env_file: env/magento.env
     volumes: *appvolumes
 
-  ## Adding Elastic Search to run integration tests in local dev environment
-  elastic:
-    image: elasticsearch:7.9.3
-    hostname: elastic
-    ports:
-      - "9200:9200"
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+## ####################################################################################################
+## Uncomment the lines below to add 'Elastic Search' to run integration tests in local dev environment
+## Some integration tests require a running instance of elastic search, otherwise, will break.
+## ####################################################################################################
+#  elastic:
+#    image: elasticsearch:7.9.3
+#    hostname: elastic
+#    ports:
+#      - "9200:9200"
+#    environment:
+#      - cluster.name=docker-cluster
+#      - bootstrap.memory_lock=true
+#      - discovery.type=single-node
+#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1

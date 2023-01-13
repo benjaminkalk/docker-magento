@@ -67,6 +67,20 @@ bin/create
 open https://magento2.test
 ```
 
+#### Running Integration Tests in local development enviroment.
+
+Follow the next steps to configure the execution of integration tests, after installing magento:
+
+1. Edit `../docker-compose.dev.yml` and uncomment the section where elastic search is added as a container.
+2. Restart the docker containers: `bin/restart`
+3. Setup integration tests configuration: `bin/setup-integration-tests`. This will create configuration files and move them to the container.
+4. Run all the integration tests: `bin/dev-test-run integration` 
+4.1. To run a given integration test use: `bin/dev-test-run integration ../../../app/code/Magento/${Module}/Test/Integration/${TestFile}.php`. Please note that the path corresponds to the container's file system. 
+4.2. To use magento's cli to run the integration tests instead, follow the next steps:
+4.2.1. Copy `src/dev/tests/integration/phpunit.xml.dist` to `src/dev/tests/integration/phpunit.xml`
+4.2.2  Move `phpunit.xml` to the container: `bin/copytocontainer dev/tests/integration/phpunit.xml`. Note the path does not include 'src/'.
+4.2.3. Run `bin/magento dev:tests:run integration`.
+
 ---
 
 ### CLI Commands
@@ -108,6 +122,7 @@ open https://magento2.test
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
 - `bin/setup`: Existing script but was customized to fit Data Solutions developer use cases and driven by `env/install.env` configuration
+- `bin/setup-integration-tests`: Use it to create/update the configuration files required to run integration tests. It copies them to the container.  
 - `bin/setup-grunt`: Install and configure Grunt JavaScript task runner to compile .less files
 - `bin/setup-pwa-studio`: (BETA) Install PWA Studio (requires NodeJS and Yarn to be installed on the host machine). Pass in your base site domain, otherwise the default `magento2.test` will be used. Ex: `bin/setup-pwa-studio magento2.test`
 - `bin/setup-composer-auth`: Setup authentication credentials for Composer.
