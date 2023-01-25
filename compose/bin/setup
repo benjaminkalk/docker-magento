@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -o errexit
 
 # shellcheck source=../env/install.env
@@ -22,6 +21,11 @@ bin/clinotty chmod u+x bin/magento
 
 echo "Set up composer auth.json..."
 bin/setup-composer-auth
+
+echo "Adding Magento modules to Composer allow-plugins directive..."
+bin/clinotty composer config --no-plugins allow-plugins.magento/magento-composer-installer true
+bin/clinotty composer config --no-plugins allow-plugins.magento/inventory-composer-installer true
+bin/clinotty composer config --no-plugins allow-plugins.laminas/laminas-dependency-plugin true
 
 echo "Running composer install..."
 bin/composer install
