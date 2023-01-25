@@ -32,7 +32,8 @@ services:
       #- "host.docker.internal:host-gateway"
 
   phpfpm:
-    image: markoshust/magento-php:8.1-fpm-1
+    #image: markoshust/magento-php:8.1-fpm-1
+    image: wbrandon/magento-php:8.2-fpm-1 # temporary until upstream updates for php 8.2
     volumes: *appvolumes
     env_file: env/install.env
     #extra_hosts: *appextrahosts
