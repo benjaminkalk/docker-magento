@@ -11,7 +11,7 @@ echo "# Setting up Magento Commerce #"
 echo "###############################"
 echo ""
 
-docker-compose -f docker-compose.yml up -d
+bin/docker-compose up -d
 [ $? != 0 ] && echo "Failed to start Docker services" && exit
 
 echo "Copying all files from host to container..."

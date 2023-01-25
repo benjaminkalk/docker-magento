@@ -1,13 +1,13 @@
 #!/bin/bash
 
-set -o errexit
+if docker compose version > /dev/null 2>&1; then
+  DOCKER_COMPOSE="docker compose"
+else
+  DOCKER_COMPOSE="docker-compose"
+fi
 
-echo ""
-echo "#######################################################"
-echo "# Destroying Data Solutions development environnment! #"
-echo "#######################################################"
-echo ""
-
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml stop
-docker system prune
-docker volume prune
+if [ "$1" == "--no-dev" ]; then
+  ${DOCKER_COMPOSE} -f compose.yaml "${@:2}"
+else
+  ${DOCKER_COMPOSE} -f compose.yaml -f compose.dev.yaml "$@"
+fi
