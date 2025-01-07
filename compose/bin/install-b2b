@@ -22,7 +22,7 @@ else
   cp -R "$FULL_HOST_INSTALL_PATH/b2b/app/code/Magento" "$FULL_HOST_INSTALL_PATH/app/code/Magento"
 fi
 
-bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch7 Magento_Elasticsearch8 Magento_OpenSearch Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch Magento_ElasticsearchCatalogPermissionsGraphQl
+bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch7 Magento_OpenSearch Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch Magento_ElasticsearchCatalogPermissionsGraphQl
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento cache:clean

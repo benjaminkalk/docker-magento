@@ -25,6 +25,7 @@ git clone git@github.com:magento-commerce/data-solutions-magento-bff.git extensi
 git clone git@github.com:magento-commerce/saas-export.git extensions/saas-export
 git clone git@github.com:magento-commerce/commerce-data-export.git extensions/commerce-data-export
 git clone git@github.com:magento-commerce/commerce-data-export-ee.git extensions/commerce-data-export-ee
+git clone git@github.com:magento-commerce/experience-platform-connector.git extensions/experience-platform-connector
 
 # Clone product recommendations repos to extensions directories
 git clone git@github.com:magento-commerce/magento-product-recommendations.git extensions/product-recommendations

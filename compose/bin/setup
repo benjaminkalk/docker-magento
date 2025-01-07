@@ -28,9 +28,9 @@ bin/composer install
 
 echo "Installing Data Solutions composer dev requirements"
 # Install services-connector jwt dependency
-bin/composer require firebase/php-jwt
+bin/composer require -W firebase/php-jwt
 # Install live search graphql dependency
-bin/composer require gmostafa/php-graphql-client
+bin/composer require -W gmostafa/php-graphql-client
 
 echo "Waiting for connection to RabbitMQ..."
 rabbitmqi=10
@@ -76,7 +76,7 @@ bin/magento setup:install \
   --session-save-redis-log-level=4 \
   --session-save-redis-db=2 \
   --use-rewrites=1 \
-  --disable-modules=Magento_AdminAdobeImsTwoFactorAuth,Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch7,Magento_Elasticsearch8,Magento_OpenSearch,Magento_ElasticsearchCatalogPermissions,Magento_InventoryElasticsearch,Magento_ElasticsearchCatalogPermissionsGraphQl
+  --disable-modules=Magento_AdminAdobeImsTwoFactorAuth,Magento_TwoFactorAuth,Magento_Elasticsearch,Magento_Elasticsearch7,Magento_OpenSearch,Magento_ElasticsearchCatalogPermissions,Magento_InventoryElasticsearch,Magento_ElasticsearchCatalogPermissionsGraphQl
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer --all
@@ -94,7 +94,7 @@ fi
 
 echo "Enabling required modules and recompiling..."
 bin/magento module:enable --all
-bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch7 Magento_Elasticsearch8 Magento_OpenSearch Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch Magento_ElasticsearchCatalogPermissionsGraphQl
+bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth Magento_Elasticsearch Magento_Elasticsearch7 Magento_OpenSearch Magento_ElasticsearchCatalogPermissions Magento_InventoryElasticsearch Magento_ElasticsearchCatalogPermissionsGraphQl
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 

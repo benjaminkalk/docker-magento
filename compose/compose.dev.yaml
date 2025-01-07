@@ -19,60 +19,91 @@ services:
       #- ./src/patches:/var/www/html/patches:cached
       #- ./src/var/log:/var/www/html/var/log:cached
       #- ./src/var/report:/var/www/html/var/report:cached
-      - ./extensions/services-connector/ServicesConnector:/var/www/html/app/code/Magento/ServicesConnector:consistent
-      - ./extensions/services-id/ServicesId:/var/www/html/app/code/Magento/ServicesId:consistent
-      - ./extensions/services-id/ServicesIdGraphQlServer:/var/www/html/app/code/Magento/ServicesIdGraphQlServer:consistent
-      - ./extensions/services-id/ServicesIdLayout:/var/www/html/app/code/Magento/ServicesIdLayout:consistent
+      # - ./extensions/services-connector/ServicesConnector:/var/www/html/app/code/Magento/ServicesConnector:consistent
+      # - ./extensions/services-id/ServicesId:/var/www/html/app/code/Magento/ServicesId:consistent
+      # - ./extensions/services-id/ServicesIdGraphQlServer:/var/www/html/app/code/Magento/ServicesIdGraphQlServer:consistent
+      # - ./extensions/services-id/ServicesIdLayout:/var/www/html/app/code/Magento/ServicesIdLayout:consistent
       - ./extensions/data-services/DataServices:/var/www/html/app/code/Magento/DataServices:consistent
       - ./extensions/data-services/DataServicesMultishipping:/var/www/html/app/code/Magento/DataServicesMultishipping:consistent
-      - ./extensions/commerce-data-export/CatalogDataExporter:/var/www/html/app/code/Magento/CatalogDataExporter:consistent
-      - ./extensions/commerce-data-export/CatalogInventoryDataExporter:/var/www/html/app/code/Magento/CatalogInventoryDataExporter:consistent
-      - ./extensions/commerce-data-export/CatalogUrlRewriteDataExporter:/var/www/html/app/code/Magento/CatalogUrlRewriteDataExporter:consistent
-      - ./extensions/commerce-data-export/ConfigurableProductDataExporter:/var/www/html/app/code/Magento/ConfigurableProductDataExporter:consistent
-      - ./extensions/commerce-data-export/BundleProductDataExporter:/var/www/html/app/code/Magento/BundleProductDataExporter:consistent
-      - ./extensions/commerce-data-export/DataExporter:/var/www/html/app/code/Magento/DataExporter:consistent
-      - ./extensions/commerce-data-export/ParentProductDataExporter:/var/www/html/app/code/Magento/ParentProductDataExporter:consistent
-      - ./extensions/commerce-data-export/ProductVariantDataExporter:/var/www/html/app/code/Magento/ProductVariantDataExporter:consistent
-      - ./extensions/commerce-data-export/QueryXml:/var/www/html/app/code/Magento/QueryXml:consistent
-      - ./extensions/commerce-data-export/ScopesDataExporter:/var/www/html/app/code/Magento/ScopesDataExporter:consistent
-      - ./extensions/commerce-data-export-ee/ProductOverrideDataExporter:/var/www/html/app/code/Magento/ProductOverrideDataExporter:consistent
-      - ./extensions/saas-export/SaaSCatalog:/var/www/html/app/code/Magento/SaaSCatalog:consistent
-      - ./extensions/saas-export/SaaSCommon:/var/www/html/app/code/Magento/SaaSCommon:consistent
-      - ./extensions/saas-export/SaaSScopes:/var/www/html/app/code/Magento/SaaSScopes:consistent
+      - ./extensions/data-services-b2b/DataServicesB2B:/var/www/html/app/code/Magento/DataServicesB2B:consistent
+      - ./extensions/data-services-graphql/DataServicesGraphQl:/var/www/html/app/code/Magento/DataServicesGraphQl:consistent
+      # - ./extensions/commerce-data-export/CatalogDataExporter:/var/www/html/app/code/Magento/CatalogDataExporter:consistent
+      # - ./extensions/commerce-data-export/CatalogInventoryDataExporter:/var/www/html/app/code/Magento/CatalogInventoryDataExporter:consistent
+      # - ./extensions/commerce-data-export/CatalogUrlRewriteDataExporter:/var/www/html/app/code/Magento/CatalogUrlRewriteDataExporter:consistent
+      # - ./extensions/commerce-data-export/ConfigurableProductDataExporter:/var/www/html/app/code/Magento/ConfigurableProductDataExporter:consistent
+      # - ./extensions/commerce-data-export/BundleProductDataExporter:/var/www/html/app/code/Magento/BundleProductDataExporter:consistent
+      # - ./extensions/commerce-data-export/DataExporter:/var/www/html/app/code/Magento/DataExporter:consistent
+      # - ./extensions/commerce-data-export/ParentProductDataExporter:/var/www/html/app/code/Magento/ParentProductDataExporter:consistent
+      # - ./extensions/commerce-data-export/ProductVariantDataExporter:/var/www/html/app/code/Magento/ProductVariantDataExporter:consistent
+      # - ./extensions/commerce-data-export/QueryXml:/var/www/html/app/code/Magento/QueryXml:consistent
+      - ./extensions/commerce-data-export/SalesOrdersDataExporter:/var/www/html/app/code/Magento/SalesOrdersDataExporter:consistent
+      # - ./extensions/commerce-data-export/ScopesDataExporter:/var/www/html/app/code/Magento/ScopesDataExporter:consistent
+      # - ./extensions/commerce-data-export-ee/ProductOverrideDataExporter:/var/www/html/app/code/Magento/ProductOverrideDataExporter:consistent
+      # - ./extensions/saas-export/SaaSCatalog:/var/www/html/app/code/Magento/SaaSCatalog:consistent
+      # - ./extensions/saas-export/SaaSCommon:/var/www/html/app/code/Magento/SaaSCommon:consistent
+      # - ./extensions/saas-export/SaaSScopes:/var/www/html/app/code/Magento/SaaSScopes:consistent
+      # - ./extensions/saas-export/SaaSSales:/var/www/html/app/code/Magento/SaaSSales:consistent
+      # - ./extensions/saas-export/SaaSCategoryPermissions:/var/www/html/app/code/Magento/SaaSCategoryPermissions:consistent
+      # - ./extensions/saas-export/SaaSInventory:/var/www/html/app/code/Magento/SaaSInventory:consistent
+      # - ./extensions/saas-export/SaaSPrice:/var/www/html/app/code/Magento/SaaSPrice:consistent
+      # - ./extensions/saas-export/SaaSCategory:/var/www/html/app/code/Magento/SaaSCategory:consistent
+      # - ./extensions/saas-export/SaaSProductOverride:/var/www/html/app/code/Magento/SaaSProductOverride:consistent
+      # - ./extensions/saas-export/SaaSProductVariant:/var/www/html/app/code/Magento/SaaSProductVariant:consistent
       - ./extensions/product-recommendations/ProductRecommendationsLayout:/var/www/html/app/code/Magento/ProductRecommendationsLayout:consistent
       - ./extensions/product-recommendations/PageBuilderProductRecommendations:/var/www/html/app/code/Magento/PageBuilderProductRecommendations:consistent
       - ./extensions/product-recommendations/VisualProductRecommendations:/var/www/html/app/code/Magento/VisualProductRecommendations:consistent
       - ./extensions/product-recommendations-admin/ProductRecommendationsAdmin:/var/www/html/app/code/Magento/ProductRecommendationsAdmin:consistent
       - ./extensions/product-recommendations-admin/ProductRecommendationsSyncAdmin:/var/www/html/app/code/Magento/ProductRecommendationsSyncAdmin:consistent
-      - ./extensions/catalog-sync-admin/CatalogSyncAdmin:/var/www/html/app/code/Magento/CatalogSyncAdmin:consistent
+      # - ./extensions/catalog-sync-admin/CatalogSyncAdmin:/var/www/html/app/code/Magento/CatalogSyncAdmin:consistent
       - ./extensions/magento-live-search/LiveSearch:/var/www/html/app/code/Magento/LiveSearch:consistent
       - ./extensions/magento-live-search/LiveSearchAdapter:/var/www/html/app/code/Magento/LiveSearchAdapter:consistent
       - ./extensions/magento-live-search/LiveSearchStorefrontPopover:/var/www/html/app/code/Magento/LiveSearchStorefrontPopover:consistent
       - ./extensions/magento-live-search/LiveSearchMetrics:/var/www/html/app/code/Magento/LiveSearchMetrics:consistent
       - ./extensions/magento-live-search/LiveSearchTerms:/var/www/html/app/code/Magento/LiveSearchTerms:consistent
-      - ./extensions/data-solutions-magento-bff/GraphQlServer:/var/www/html/app/code/Magento/GraphQlServer:consistent
-      - ./extensions/data-solutions-magento-bff/AdminGraphQlServer:/var/www/html/app/code/Magento/AdminGraphQlServer:consistent
+      - ./extensions/magento-live-search/LiveSearchProductListing:/var/www/html/app/code/Magento/LiveSearchProductListing:consistent
+      # - ./extensions/data-solutions-magento-bff/GraphQlServer:/var/www/html/app/code/Magento/GraphQlServer:consistent
+      # - ./extensions/data-solutions-magento-bff/AdminGraphQlServer:/var/www/html/app/code/Magento/AdminGraphQlServer:consistent
+      - ./extensions/experience-platform-connector/ExperienceConnectorAdmin:/var/www/html/app/code/Magento/ExperienceConnectorAdmin:consistent
+      - ./extensions/experience-platform-connector/ExperienceConnector:/var/www/html/app/code/Magento/ExperienceConnector:consistent
+      - ./extensions/experience-platform-connector/ExperienceConnectorAepIntegration:/var/www/html/app/code/Magento/ExperienceConnectorAepIntegration:consistent
+      - ./extensions/experience-platform-connector/ExperienceConnectorAdminGraphQl:/var/www/html/app/code/Magento/ExperienceConnectorAdminGraphQl:consistent
+      - ./extensions/experience-platform-connector-graphql/ExperienceConnectorGraphQl:/var/www/html/app/code/Magento/ExperienceConnectorGraphQl:consistent
+      # - ./extensions/experience-platform-connector-b2b/ExperienceConnectorAdminGraphQl:/var/www/html/app/code/Magento/ExperienceConnectorAdminGraphQl:consistent
+      # - ./extensions/segments-service/BannerAudience:/var/www/html/app/code/Magento/BannerAudience:consistent
+      # - ./extensions/segments-service/BannerAudiencePageBuilder:/var/www/html/app/code/Magento/BannerAudiencePageBuilder:consistent
+      # - ./extensions/segments-service/Segment:/var/www/html/app/code/Magento/Segment:consistent
+      # - ./extensions/segments-service/SegmentGraphQlServer:/var/www/html/app/code/Magento/SegmentGraphQlServer:consistent
+      - ./extensions/segments-service/ExperienceAudiences:/var/www/html/app/code/Magento/ExperienceAudiences:consistent
+      - ./extensions/segments-service/ExperienceAudiencesGraphQl:/var/www/html/app/code/Magento/ExperienceAudiencesGraphQl:consistent
+      - ./extensions/segments-service/ExperienceBannerAudience:/var/www/html/app/code/Magento/ExperienceBannerAudience:consistent
+      - ./extensions/segments-service/ExperienceBannerAudiencePageBuilder:/var/www/html/app/code/Magento/ExperienceBannerAudiencePageBuilder:consistent
+      - ./extensions/segments-service/ExperienceBannerAudienceGraphQl:/var/www/html/app/code/Magento/ExperienceBannerAudienceGraphQl:consistent
+      - ./extensions/segments-service/ExperienceTargetRule:/var/www/html/app/code/Magento/ExperienceTargetRule:consistent
+      - ./extensions/segments-service/ExperienceTargetRuleGraphQl:/var/www/html/app/code/Magento/ExperienceTargetRuleGraphQl:consistent
+      - ./extensions/orders-connector/SaaSOrderSync:/var/www/html/app/code/Magento/SaaSOrderSync:consistent
+      - ./extensions/orders-connector/SaaSRMASync:/var/www/html/app/code/Magento/SaaSRMASync:consistent
+      # - ./extensions/module-commerce-events-client:/var/www/html/app/code/Magento/CommerceEventsClient:consistent
       #- ./extensions/data-solutions-magento-bff/ExternalSchemaGraphQlServer:/var/www/html/app/code/Magento/ExternalSchemaGraphQlServer:consistent
 
   phpfpm:
     env_file: env/magento.env
     volumes: *appvolumes
 
-## ####################################################################################################
-## Uncomment the lines below to add 'Elastic Search' to run integration tests in local dev environment
-## Some integration tests require a running instance of elastic search, otherwise, will break.
-## ####################################################################################################
-#  elastic:
-#    image: elasticsearch:7.9.3
-#    hostname: elastic
-#    ports:
-#      - "9200:9200"
-#    environment:
-#      - cluster.name=docker-cluster
-#      - bootstrap.memory_lock=true
-#      - discovery.type=single-node
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#    ulimits:
-#      memlock:
-#        soft: -1
-#        hard: -1
+# ####################################################################################################
+# Uncomment the lines below to add 'Elastic Search' to run integration tests in local dev environment
+# Some integration tests require a running instance of elastic search, otherwise, will break.
+# ####################################################################################################
+  elastic:
+   image: elasticsearch:7.9.3
+   hostname: elastic
+   ports:
+     - "9200:9200"
+   environment:
+     - cluster.name=docker-cluster
+     - bootstrap.memory_lock=true
+     - discovery.type=single-node
+     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+   ulimits:
+     memlock:
+       soft: -1
+       hard: -1
